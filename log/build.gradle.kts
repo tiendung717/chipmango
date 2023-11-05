@@ -1,7 +1,6 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("maven-publish")
 }
 
 android {
@@ -35,42 +34,16 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-        }
-    }
 }
 
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            groupId = "com.solid"
-            artifactId = "test"
-            version = "1.0"
-
-            afterEvaluate {
-                from(components["release"])
-            }
-        }
-    }
-
-    repositories {
-        maven {
-            name = "myrepo"
-            url = uri("${project.buildDir}/repo")
-        }
-    }
+ext {
+    set("PUBLISH_GROUP_ID", "io.github.tiendung717")
+    set("PUBLISH_VERSION", "0.0.1")
+    set("PUBLISH_ARTIFACT_ID", "chipmango")
 }
 
-tasks.register<Zip>("generateRepo") {
-    val publishTask = tasks.named(
-        "publishReleasePublicationToMyrepoRepository",
-        PublishToMavenRepository::class.java)
-    from(publishTask.map { it.repository.url })
-    into("mylibrary")
-    archiveFileName.set("mylibrary.zip")
+apply {
+    from("${rootDir}/scripts/publish-module.gradle")
 }
 
 dependencies {
