@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="upgrade_to_unlock_extra_features">Upgrade to Premium</string>
+    <string name="text_subscription_explain" translatable="false">"After the free trial period ends or the purchase is confirmed, payment will be charged to your Google Play account. Subscription will automatically renew unless aut-renew is turned off at least 24 hours before the end of the current period. You can manage or unsubscribe at any time in Google Play account settings."</string>
+
+</resources>

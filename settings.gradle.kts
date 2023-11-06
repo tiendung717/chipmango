@@ -17,3 +17,8 @@ rootProject.name = "Android Wizard"
 include(":app")
 include(":chipmango")
 include(":chipmango-ad")
+include(":chipmango-iap")
+include(":chipmango-room-converters")
+include(":chipmango-bluetooth")
+include(":chipmango-notification")
+include(":chipmango-permission")
