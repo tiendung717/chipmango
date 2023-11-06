@@ -38,7 +38,7 @@ android {
 
 ext {
     set("PUBLISH_GROUP_ID", "io.github.tiendung717")
-    set("PUBLISH_VERSION", "0.0.1")
+    set("PUBLISH_VERSION", "0.0.2")
     set("PUBLISH_ARTIFACT_ID", "chipmango")
 }
 

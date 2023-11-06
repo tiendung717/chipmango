@@ -4,7 +4,7 @@ import android.util.Log
 
 class SolidLog {
     fun check() {
-        d("nt.dung", "Working!!!")
+        d("nt.dung", "Working fine!!!")
     }
 
     fun d(tag: String, message: String) {
