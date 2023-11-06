@@ -47,7 +47,7 @@ afterEvaluate {
                     licenses {
                         license {
                             name = 'Chipmango License'
-                            url = 'https://github.com/GetStream/stream-chat-android/blob/main/LICENSE'
+                            url = 'https://github.com/tiendung717/chipmango/blob/master/LICENSE'
                         }
                     }
                     developers {
