@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Android Wizard"
 include(":app")
-include(":log")
+include(":chipmango")
