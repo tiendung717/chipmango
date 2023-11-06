@@ -7,7 +7,6 @@ import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject
 
-@HiltAndroidApp
 abstract class CoreApplication : Application(), Configuration.Provider {
 
     @Inject

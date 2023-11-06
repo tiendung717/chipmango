@@ -22,11 +22,15 @@ class DestinationFactory(private val scheme: String, private val host: String) {
 
     fun create(
         path: String,
+        screenName: String,
+        screenClass: String,
         vararg queryParameters: String
     ): Destination {
         val url = buildRoute(path, queryParameters)
         return Destination(
             route = url,
+            screenName = screenName,
+            screenClass = screenClass,
             arguments = queryParameters.toList(),
             deepLinks = listOf(
                 navDeepLink {
