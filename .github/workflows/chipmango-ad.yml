@@ -1,4 +1,4 @@
-name: "Publish to Maven Repository"
+name: "Chipmango-Ad - Publish to Maven Repository"
 on:
   push:
     branches: [ master ]
@@ -17,7 +17,7 @@ jobs:
 
         # Builds the release artifacts of the library
       - name: Release build
-        run: ./gradlew :chipmango:assembleRelease
+        run: ./gradlew :chipmango-ad:assembleRelease
 
         # Generates other artifacts (javadocJar is optional)
       - name: Source jar

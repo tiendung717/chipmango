@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ad_text_light">#212121</color>
+    <color name="ad_text_dark">#FFFFFF</color>
+
+    <color name="primary">#E91E63</color>
+    <color name="primary12">#4D4473EB</color>
+    <color name="text2">#757E83</color>
+    <color name="text1">#000000</color>
+</resources>
