@@ -1,9 +1,14 @@
+import deps.dependOn
 import org.jetbrains.kotlin.konan.properties.Properties
 import java.io.FileInputStream
 
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id("kotlin-android")
+    id("kotlin-parcelize")
+    id("dagger.hilt.android.plugin")
 }
 
 val versions = rootProject.file("version.properties")
@@ -14,7 +19,7 @@ val minor = props["minorVersion"].toString().toInt()
 val patch = props["patchVersion"].toString().toInt()
 
 android {
-    namespace = "com.solid.log"
+    namespace = "io.chipmango"
     compileSdk = 33
 
     defaultConfig {
@@ -38,17 +43,26 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = deps.Compose.Versions.composeCompiler
     }
 }
 
 ext {
     set("PUBLISH_GROUP_ID", "io.github.tiendung717")
-    set("PUBLISH_ARTIFACT_ID", "log")
+    set("PUBLISH_ARTIFACT_ID", "chipmango")
     set("PUBLISH_VERSION", "$major.$minor.$patch")
 }
 
@@ -57,11 +71,11 @@ apply {
 }
 
 dependencies {
-
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.8.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    dependOn(
+        deps.AndroidX,
+        deps.Compose,
+        deps.Hilt,
+        deps.Log,
+        deps.Retrofit
+    )
 }
