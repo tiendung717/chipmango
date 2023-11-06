@@ -31,9 +31,7 @@ class ChipmangoIap @Inject constructor(
     @ApplicationContext private val appContext: Context,
     @ChipmangoIapConfiguration private val configuration: IapConfiguration
 ) {
-
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-
     private lateinit var billingClient: BillingClient
     private val productDetailsMap = MutableStateFlow<Map<String, ProductDetails>>(emptyMap())
 
@@ -148,7 +146,7 @@ class ChipmangoIap @Inject constructor(
     }
 
     private fun processPendingPurchase(purchase: Purchase) {
-        Timber.tag("nt.dung").e("Purchase is in pending state!! ${purchase.products}")
+
     }
 
     private fun fetchPurchases() {
@@ -188,15 +186,11 @@ class ChipmangoIap @Inject constructor(
         connectBillingService()
     }
 
-    fun getAllProducts() = productDetailsMap
+    internal fun getAllProducts() = productDetailsMap
 
-    fun getProduct(productId: String) = productDetailsMap.map { it[productId] }
+    internal fun getProduct(productId: String) = productDetailsMap.map { it[productId] }
 
-    fun restorePurchase() {
-        fetchPurchases()
-    }
-
-    fun launchBillingFlow(activity: Activity, productId: String, offerToken: String? = null): Boolean {
+    internal fun launchBillingFlow(activity: Activity, productId: String, offerToken: String? = null): Boolean {
         val productMap = productDetailsMap.value
         val productDetails = productMap[productId] ?: return false
         val productDetailsParamsList = listOf(
@@ -212,6 +206,12 @@ class ChipmangoIap @Inject constructor(
 
         val billingResult = billingClient.launchBillingFlow(activity, billingFlowParams)
         return billingResult.isSuccess()
+    }
+
+    internal fun getMostPopularProductId() = configuration.getMostPopularProductId()
+
+    fun restorePurchase() {
+        fetchPurchases()
     }
 
     fun isPurchased(productId: String): Flow<Boolean> {

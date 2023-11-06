@@ -39,4 +39,6 @@ class PurchaseViewModel @Inject constructor(private val chipmangoIap: ChipmangoI
     fun getProduct(productId: String): Flow<ProductDetails?> {
         return chipmangoIap.getProduct(productId)
     }
+
+    fun getMostPopularProductId() = chipmangoIap.getMostPopularProductId()
 }

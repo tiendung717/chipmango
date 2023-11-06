@@ -7,17 +7,17 @@ import com.android.billingclient.api.Purchase.PurchaseState
 import io.chipmango.iap.ext.Security.verifyPurchase
 import timber.log.Timber
 
-fun BillingResult.isSuccess() = responseCode == BillingResponseCode.OK
+internal fun BillingResult.isSuccess() = responseCode == BillingResponseCode.OK
 
-fun BillingResult.isUserCancelled() = responseCode == BillingResponseCode.USER_CANCELED
+internal fun BillingResult.isUserCancelled() = responseCode == BillingResponseCode.USER_CANCELED
 
-fun Purchase.isPurchased() = purchaseState == PurchaseState.PURCHASED
+internal fun Purchase.isPurchased() = purchaseState == PurchaseState.PURCHASED
 
-fun Purchase.isPending() = purchaseState == PurchaseState.PENDING
+internal fun Purchase.isPending() = purchaseState == PurchaseState.PENDING
 
-fun Purchase.isConsumable() = false
+internal fun Purchase.isConsumable() = false
 
-fun String.verifySignature(purchase: Purchase): Boolean {
+internal fun String.verifySignature(purchase: Purchase): Boolean {
     return verifyPurchase(purchase.originalJson, purchase.signature, this)
 }
 

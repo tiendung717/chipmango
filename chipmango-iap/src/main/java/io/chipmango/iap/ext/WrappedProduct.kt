@@ -4,7 +4,7 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.ProductDetails
 import java.time.Period
 
-data class WrappedProduct(val product: ProductDetails) {
+internal data class WrappedProduct(val product: ProductDetails) {
     fun title() = product.name
 
     fun description() = product.description
