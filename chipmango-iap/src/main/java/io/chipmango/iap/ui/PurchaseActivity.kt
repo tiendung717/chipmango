@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
+import io.chipmango.iap.ChipmangoIap
 import io.chipmango.iap.IapConfiguration
 import javax.inject.Inject
 
@@ -25,12 +26,12 @@ class PurchaseActivity : AppCompatActivity() {
     }
 
     @Inject
-    lateinit var iapConfiguration: IapConfiguration
+    lateinit var chipmangoIap: ChipmangoIap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ScreenPurchase(premiumFeatures = iapConfiguration.getPremiumFeatureList()) {
+            ScreenPurchase(premiumFeatures = chipmangoIap.getPremiumFeatureList()) {
                 finish()
             }
         }

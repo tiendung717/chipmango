@@ -1,4 +1,4 @@
-name: "Chipmango-Ad - Publish to Maven Repository"
+name: "Chipmango-Iap - Publish to Maven Repository"
 on:
   push:
     branches: [ master ]

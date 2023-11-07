@@ -18,6 +18,7 @@ import io.chipmango.iap.ext.isUserCancelled
 import io.chipmango.iap.ext.verifySignature
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.chipmango.iap.di.ChipmangoIapConfiguration
+import io.chipmango.iap.model.PremiumFeature
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -235,5 +236,9 @@ class ChipmangoIap @Inject constructor(
         } catch (e: Exception) {
             Timber.tag("nt.dung").e(e)
         }
+    }
+
+    fun getPremiumFeatureList(): List<PremiumFeature> {
+        return configuration.getPremiumFeatureList()
     }
 }
