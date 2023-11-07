@@ -110,7 +110,7 @@ internal fun ScreenPurchase(premiumFeatures: List<PremiumFeature>, onCloseClicke
                     text = stringResource(R.string.upgrade_to_unlock_extra_features),
                     style = MaterialTheme.typography.titleMedium,
                     textAlign = TextAlign.Start,
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = Color.White
                 )
 
                 Icon(
@@ -120,7 +120,7 @@ internal fun ScreenPurchase(premiumFeatures: List<PremiumFeature>, onCloseClicke
                         .padding(6.dp),
                     imageVector = Icons.Rounded.Close,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onBackground
+                    tint = Color.White
                 )
             }
 
