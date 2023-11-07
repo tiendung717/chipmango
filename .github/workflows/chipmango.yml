@@ -16,8 +16,16 @@ jobs:
           java-version: '17'
 
         # Builds the release artifacts of the library
-      - name: Release build
+      - name: Chipmango - Release build
         run: ./gradlew :chipmango:assembleRelease
+
+        # Builds the release artifacts of the library
+      - name: Chipmango-Ad - Release build
+        run: ./gradlew :chipmango-ad:assembleRelease
+
+        # Builds the release artifacts of the library
+      - name: Chipmango-Iap - Release build
+        run: ./gradlew :chipmango-iap:assembleRelease
 
         # Generates other artifacts (javadocJar is optional)
       - name: Source jar
