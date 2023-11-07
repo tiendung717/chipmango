@@ -53,7 +53,7 @@ internal fun JcAdBanner(
                     .fillMaxHeight(),
                 factory = { context ->
                     LayoutInflater.from(context)
-                        .inflate(R.layout.template_native_loading, null, false)
+                        .inflate(R.layout.template_banner_loading, null, false)
                 }
             )
         }
