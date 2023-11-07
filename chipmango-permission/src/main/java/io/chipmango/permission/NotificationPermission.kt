@@ -2,6 +2,7 @@ package io.chipmango.permission
 
 import android.Manifest
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -18,10 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationManagerCompat
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberPermissionState
 
 @OptIn(ExperimentalPermissionsApi::class)
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun NotificationRequester(
     modifier: Modifier,
@@ -30,17 +31,48 @@ fun NotificationRequester(
     content: @Composable BoxScope.(onRequestPermission: () -> Unit) -> Unit
 ) {
     val context = LocalContext.current
-    val notificationPermissionState = rememberPermissionState(
-        permission = Manifest.permission.POST_NOTIFICATIONS,
-    )
-    val settingIntent = remember {
-        Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-            .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+    val notificationPermissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        rememberPermissionState(
+            permission = Manifest.permission.POST_NOTIFICATIONS,
+        )
+    } else {
+        remember {
+            object : PermissionState {
+                override val hasPermission: Boolean
+                    get() = true
+                override val permission: String
+                    get() = ""
+                override val permissionRequested: Boolean
+                    get() = true
+                override val shouldShowRationale: Boolean
+                    get() = false
+                override fun launchPermissionRequest() {
+
+                }
+            }
+        }
     }
+
+    val settingIntent =  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        remember {
+            Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+        }
+    } else {
+        remember {
+            Intent().apply {
+                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                data = Uri.fromParts("package", context.packageName, null)
+            }
+        }
+    }
+
     val settingLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {
-            if (notificationPermissionState.hasPermission || NotificationManagerCompat.from(context).areNotificationsEnabled()) {
+            if (notificationPermissionState.hasPermission || NotificationManagerCompat.from(context)
+                    .areNotificationsEnabled()
+            ) {
                 onPermissionGranted()
             }
         }
@@ -52,14 +84,26 @@ fun NotificationRequester(
 
     Box(modifier = modifier) {
         content {
-            if (!notificationPermissionState.hasPermission) {
-                if (notificationPermissionState.shouldShowRationale) {
-                    showExplainDialog = true
-                } else {
-                    notificationPermissionState.launchPermissionRequest()
+            when {
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
+                    if (!notificationPermissionState.hasPermission) {
+                        if (notificationPermissionState.shouldShowRationale) {
+                            showExplainDialog = true
+                        } else {
+                            notificationPermissionState.launchPermissionRequest()
+                        }
+                    } else {
+                        onPermissionGranted()
+                    }
                 }
-            } else {
-                onPermissionGranted()
+
+                else -> {
+                    if (!NotificationManagerCompat.from(context).areNotificationsEnabled()) {
+                        settingLauncher.launch(settingIntent)
+                    } else {
+                        onPermissionGranted()
+                    }
+                }
             }
         }
     }

@@ -18,7 +18,7 @@ val minor = props["minorVersion"].toString().toInt()
 val patch = props["patchVersion"].toString().toInt()
 
 android {
-    namespace = "io.chipmango.iap"
+    namespace = "io.chipmango.permission"
     compileSdk = 33
 
     defaultConfig {
@@ -62,7 +62,7 @@ android {
 
 ext {
     set("PUBLISH_GROUP_ID", "io.github.tiendung717")
-    set("PUBLISH_ARTIFACT_ID", "chipmango-iap")
+    set("PUBLISH_ARTIFACT_ID", "chipmango-permission")
     set("PUBLISH_VERSION", "$major.$minor.$patch")
 }
 
