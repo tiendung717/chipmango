@@ -20,6 +20,7 @@ import com.google.android.gms.ads.nativead.NativeAdOptions
 import io.chipmango.ad.request.AdRequestFactory
 import io.chipmango.ad.AdUnit
 import io.chipmango.ad.R
+import io.chipmango.ad.TestBanner
 import io.chipmango.ad.TestNative
 import timber.log.Timber
 
@@ -27,6 +28,7 @@ import timber.log.Timber
 @Composable
 internal fun JcAdNative(
     modifier: Modifier = Modifier,
+    isTestAd: Boolean,
     isDarkMode: Boolean,
     adUnit: AdUnit = TestNative,
     adLayout: @Composable (Boolean, NativeAd) -> Unit = { darkMode, ad ->
@@ -36,9 +38,12 @@ internal fun JcAdNative(
     val context = LocalContext.current
     var nativeAd by remember { mutableStateOf<NativeAd?>(null) }
     var adLoaded by remember { mutableStateOf(false) }
+    val ad = remember {
+        if (isTestAd) TestNative else adUnit
+    }
 
     val adLoader = remember {
-        AdLoader.Builder(context, adUnit.unitId)
+        AdLoader.Builder(context, ad.unitId)
             .forNativeAd { ad: NativeAd ->
                 nativeAd = ad
             }
@@ -59,7 +64,7 @@ internal fun JcAdNative(
             .build()
     }
 
-    DisposableEffect(adUnit) {
+    DisposableEffect(ad) {
         adLoader.loadAd(AdRequestFactory.create())
         onDispose {
             nativeAd?.destroy()

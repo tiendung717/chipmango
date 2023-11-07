@@ -10,17 +10,19 @@ import io.chipmango.ad.native.TemplateNativeBanner
 @Composable
 fun ChipmangoBannerAd(
     modifier: Modifier = Modifier,
+    isTestAd: Boolean,
     isPremium: Boolean,
     adUnit: AdUnit
 ) {
     if (!isPremium) {
-        JcAdBanner(modifier = modifier, ad = adUnit)
+        JcAdBanner(modifier = modifier, adUnit = adUnit, isTestAd = isTestAd)
     }
 }
 
 @Composable
 fun ChipmangoNativeAd(
     modifier: Modifier = Modifier,
+    isTestAd: Boolean,
     isPremium: Boolean,
     darkMode: Boolean,
     adUnit: AdUnit,
@@ -33,7 +35,8 @@ fun ChipmangoNativeAd(
             modifier = modifier,
             adUnit = adUnit,
             adLayout = adLayout,
-            isDarkMode = darkMode
+            isDarkMode = darkMode,
+            isTestAd = isTestAd
         )
     }
 }

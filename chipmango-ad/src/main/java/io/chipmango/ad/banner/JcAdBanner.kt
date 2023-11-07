@@ -32,9 +32,13 @@ import io.chipmango.ad.TestBanner
 @Composable
 internal fun JcAdBanner(
     modifier: Modifier,
-    ad: AdUnit = TestBanner,
+    isTestAd: Boolean,
+    adUnit: AdUnit,
     onAdFailedToLoad: () -> Unit = {}
 ) {
+    val bannerAd = remember {
+        if (isTestAd) TestBanner else adUnit
+    }
     val activity = LocalContext.current as ComponentActivity
     val adSize = remember { getAdSize(activity) }
     var adView: AdView? = remember { null }
@@ -60,7 +64,7 @@ internal fun JcAdBanner(
                 adView = AdView(it)
                     .apply {
                         setAdSize(adSize)
-                        adUnitId = ad.unitId
+                        adUnitId = bannerAd.unitId
                     }.also {
                         it.adListener = object : AdListener() {
                             override fun onAdFailedToLoad(error: LoadAdError) {
@@ -80,7 +84,7 @@ internal fun JcAdBanner(
         )
     }
 
-    DisposableEffect(ad) {
+    DisposableEffect(bannerAd) {
         onDispose {
             adView?.destroy()
         }
