@@ -1,6 +1,7 @@
 package io.chipmango.ad
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.google.android.gms.ads.nativead.NativeAd
 import io.chipmango.ad.banner.JcAdBanner

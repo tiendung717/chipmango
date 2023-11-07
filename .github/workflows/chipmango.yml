@@ -27,6 +27,10 @@ jobs:
       - name: Chipmango-Iap - Release build
         run: ./gradlew :chipmango-iap:assembleRelease
 
+        # Builds the release artifacts of the library
+      - name: Chipmango-Permission - Release build
+        run: ./gradlew :chipmango-permission:assembleRelease
+
         # Generates other artifacts (javadocJar is optional)
       - name: Source jar
         run: ./gradlew androidSourcesJar

@@ -1,14 +1,13 @@
 package io.chipmango.ad.interstitial
 
-import androidx.activity.ComponentActivity
+import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
@@ -20,65 +19,58 @@ import io.chipmango.ad.TestInterstitial
 import timber.log.Timber
 
 @Composable
-internal fun JcAdInterstitial(
-    adUnit: AdUnit = TestInterstitial,
-    show: Boolean,
-    onAdFailedToLoad: () -> Unit,
-    onAdFailedToShow: () -> Unit,
+fun rememberInterstitialAd(
+    key: Any?,
+    context: Context,
+    isTestAd: Boolean,
+    isPremium: Boolean,
+    adUnit: AdUnit,
+    onAdLoadFailed: () -> Unit,
     onAdClosed: () -> Unit
-) {
-    val activity = LocalContext.current as ComponentActivity
-    var ad: InterstitialAd? by remember { mutableStateOf(null) }
+): State<InterstitialAd?> = remember(key) {
+    val interstitialAd = mutableStateOf<InterstitialAd?>(null)
 
-    val fullContentCallback = remember {
-        object : FullScreenContentCallback() {
-            override fun onAdClicked() {
-                super.onAdClicked()
-                onAdClosed()
-            }
+    val fullContentCallback = object : FullScreenContentCallback() {
+        override fun onAdClicked() {
+            super.onAdClicked()
+            onAdClosed()
+        }
 
-            override fun onAdDismissedFullScreenContent() {
-                super.onAdDismissedFullScreenContent()
-                ad = null
-                onAdClosed()
-            }
+        override fun onAdDismissedFullScreenContent() {
+            super.onAdDismissedFullScreenContent()
+            interstitialAd.value = null
+            onAdClosed()
+        }
 
-            override fun onAdFailedToShowFullScreenContent(error: AdError) {
-                super.onAdFailedToShowFullScreenContent(error)
-                Timber.tag("nt.dung").e(error.message)
-                ad = null
-                onAdFailedToShow()
-            }
+        override fun onAdFailedToShowFullScreenContent(error: AdError) {
+            Timber.tag("nt.dung").e(error.message)
+            super.onAdFailedToShowFullScreenContent(error)
+            interstitialAd.value = null
+            onAdLoadFailed()
         }
     }
 
-    DisposableEffect(show) {
+    if (!isPremium) {
         InterstitialAd.load(
-            activity,
-            adUnit.unitId,
+            context,
+            if (isTestAd) TestInterstitial.unitId else adUnit.unitId,
             AdRequestFactory.create(),
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(error: LoadAdError) {
                     Timber.tag("nt.dung").e(error.message)
-                    ad = null
-                    onAdFailedToLoad()
+                    interstitialAd.value?.fullScreenContentCallback = null
+                    interstitialAd.value = null
+                    onAdLoadFailed()
                 }
 
-                override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                    Timber.tag("nt.dung").e("Ad loaded!!!")
-                    ad = interstitialAd
-                    ad?.fullScreenContentCallback = fullContentCallback
+                override fun onAdLoaded(ad: InterstitialAd) {
+                    Timber.tag("nt.dung").e("Ad Loaded!!!!")
+                    interstitialAd.value = ad
+                    interstitialAd.value?.fullScreenContentCallback = fullContentCallback
                 }
-            })
-
-        onDispose {
-            ad = null
-        }
+            }
+        )
     }
-
-    LaunchedEffect(ad, show) {
-        if (show) {
-            ad?.show(activity)
-        }
-    }
+    
+    interstitialAd
 }
