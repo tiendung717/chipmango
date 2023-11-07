@@ -52,6 +52,8 @@ android {
 
 dependencies {
     implementation(project(":chipmango-ad"))
+    implementation(project(":chipmango-permission"))
+
     dependOn(
         deps.AndroidX,
         deps.Compose,
