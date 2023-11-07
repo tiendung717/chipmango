@@ -9,7 +9,7 @@ internal data class WrappedProduct(val product: ProductDetails) {
 
     fun description() = product.description
 
-    fun isSubscription() = product.productType == BillingClient.ProductType.SUBS
+    private fun isSubscription() = product.productType == BillingClient.ProductType.SUBS
 
     fun offerToken(): String? {
         val originalOfferToken =
@@ -25,14 +25,14 @@ internal data class WrappedProduct(val product: ProductDetails) {
     }
 
     fun price(): String {
-        val orgPrice = originalPrice()
-        return when (val days = numFreeDays()) {
-            0 -> orgPrice
-            else -> orgPrice.plus(" after $days free days trial")
-        }
+        return if (isSubscription()) subscriptionPrice() else oneTimePrice()
     }
 
-    private fun originalPrice(): String {
+    private fun oneTimePrice() : String {
+        return product.oneTimePurchaseOfferDetails?.formattedPrice.orEmpty()
+    }
+
+    private fun subscriptionPrice(): String {
         val pricePhase = product.subscriptionOfferDetails
             ?.firstOrNull { it.offerId == null }
             ?.pricingPhases
@@ -52,12 +52,5 @@ internal data class WrappedProduct(val product: ProductDetails) {
 
             listOf(price, period).joinToString("/")
         }.orEmpty()
-    }
-
-    private fun numFreeDays(): Int {
-        val offers = product.subscriptionOfferDetails?.filter { it.offerId != null }
-        val pricePhaseList = offers?.map { it.pricingPhases.pricingPhaseList }?.flatten()
-        val periodIso = pricePhaseList?.find { it.priceAmountMicros == 0L }?.billingPeriod
-        return periodIso?.let { Period.parse(it).days } ?: 0
     }
 }
