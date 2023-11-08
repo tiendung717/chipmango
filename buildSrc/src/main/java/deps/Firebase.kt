@@ -26,12 +26,7 @@ object Firebase : Dependency() {
     override fun implementations() = listOf<String>(
         firebaseCrashlytics,
         firebaseAnalytics,
-        firebaseAuth,
-        firestore,
-        googlePlayAuth,
-        playintegrity,
-        playintegrityDebug,
-        firebaseRemoteConfig
+        firebaseAuth
     )
 
     override fun platformImplementations() = listOf(firebaseBom)

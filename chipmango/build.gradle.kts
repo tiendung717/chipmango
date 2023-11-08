@@ -77,6 +77,7 @@ dependencies {
         deps.Compose,
         deps.Hilt,
         deps.Log,
-        deps.Retrofit
+        deps.Retrofit,
+        deps.Firebase
     )
 }
