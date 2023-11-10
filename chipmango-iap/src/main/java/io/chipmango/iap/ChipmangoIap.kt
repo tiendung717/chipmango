@@ -251,4 +251,12 @@ class ChipmangoIap @Inject constructor(
     fun getPremiumFeatureList(): List<PremiumFeature> {
         return configuration.getPremiumFeatureList()
     }
+
+    fun getPurchaseToken(productId: String): Flow<String> {
+        return configuration.getPurchaseToken(productId)
+    }
+
+    fun getOrderId(productId: String): Flow<String?> {
+        return configuration.getOrderId(productId)
+    }
 }
