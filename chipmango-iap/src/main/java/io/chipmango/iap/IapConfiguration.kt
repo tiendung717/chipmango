@@ -12,4 +12,8 @@ interface IapConfiguration {
     fun savePurchase(productId: String, purchased: Boolean)
     fun isPurchased(productId: String): Flow<Boolean>
     fun isPremium(): Flow<Boolean>
+    fun getPurchaseToken(productId: String): Flow<String>
+    fun getOrderId(productId: String): Flow<String?>
+    fun savePurchaseToken(productId: String, token: String)
+    fun saveOrderId(productId: String, orderId: String?)
 }

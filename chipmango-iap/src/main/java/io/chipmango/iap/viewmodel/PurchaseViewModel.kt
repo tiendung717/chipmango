@@ -2,11 +2,13 @@ package io.chipmango.iap.viewmodel
 
 import android.app.Activity
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.ProductDetails
 import io.chipmango.iap.ChipmangoIap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,4 +43,12 @@ class PurchaseViewModel @Inject constructor(private val chipmangoIap: ChipmangoI
     }
 
     fun getMostPopularProductId() = chipmangoIap.getMostPopularProductId()
+
+    fun listenPurchaseResult(productId: String, callback: () -> Unit) {
+        viewModelScope.launch {
+            isPurchased(productId).collect {
+                if (it) callback()
+            }
+        }
+    }
 }

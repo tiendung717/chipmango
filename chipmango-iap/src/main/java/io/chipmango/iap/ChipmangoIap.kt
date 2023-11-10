@@ -55,6 +55,14 @@ class ChipmangoIap @Inject constructor(
         configuration.savePurchase(productId, purchased)
     }
 
+    private fun saveOrderId(productId: String, orderId: String?) {
+        configuration.saveOrderId(productId, orderId)
+    }
+
+    private fun savePurchaseToken(productId: String, token: String) {
+        configuration.savePurchaseToken(productId, token)
+    }
+
     private fun connectBillingService() {
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
@@ -113,6 +121,8 @@ class ChipmangoIap @Inject constructor(
             // 2. Grant entitlement to the user.
             if (purchase.products.isNotEmpty()) {
                 savePurchaseStatus(productDetails.productId, true)
+                saveOrderId(productDetails.productId, purchase.orderId)
+                savePurchaseToken(productDetails.productId, purchase.purchaseToken)
             }
 
             // 3. Consume or Ack
