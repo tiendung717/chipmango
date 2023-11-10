@@ -12,7 +12,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class Persistence @Inject constructor(@ApplicationContext val context: Context) {
+class Persistence @Inject constructor(@ApplicationContext val context: Context) {
 
     private val Context.dataStore by preferencesDataStore(name = "app_setting.ds")
 
