@@ -7,8 +7,10 @@ import com.android.billingclient.api.ProductDetails
 import io.chipmango.iap.ChipmangoIap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,6 +51,18 @@ class PurchaseViewModel @Inject constructor(private val chipmangoIap: ChipmangoI
             isPurchased(productId).collect {
                 if (it) callback()
             }
+        }
+    }
+
+    fun getPurchaseToken(productId: String): String {
+        return runBlocking {
+            chipmangoIap.getPurchaseToken(productId).first()
+        }
+    }
+
+    fun getOrderId(productId: String) : String {
+        return runBlocking {
+            chipmangoIap.getOrderId(productId).first().orEmpty()
         }
     }
 }
