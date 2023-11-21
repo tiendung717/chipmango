@@ -31,6 +31,10 @@ jobs:
       - name: Chipmango-Permission - Release build
         run: ./gradlew :chipmango-permission:assembleRelease
 
+        # Builds the release artifacts of the library
+      - name: Chipmango-Room-Converters - Release build
+        run: ./gradlew :chipmango-room-converters:assembleRelease
+
         # Generates other artifacts (javadocJar is optional)
       - name: Source jar
         run: ./gradlew androidSourcesJar

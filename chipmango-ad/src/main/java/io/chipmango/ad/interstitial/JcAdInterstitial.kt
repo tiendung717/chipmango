@@ -29,7 +29,6 @@ fun rememberInterstitialAd(
     onAdClosed: () -> Unit
 ): State<InterstitialAd?> = remember(key) {
     val interstitialAd = mutableStateOf<InterstitialAd?>(null)
-
     val fullContentCallback = object : FullScreenContentCallback() {
         override fun onAdClicked() {
             super.onAdClicked()
@@ -43,7 +42,6 @@ fun rememberInterstitialAd(
         }
 
         override fun onAdFailedToShowFullScreenContent(error: AdError) {
-            Timber.tag("nt.dung").e(error.message)
             super.onAdFailedToShowFullScreenContent(error)
             interstitialAd.value = null
             onAdLoadFailed()
@@ -57,14 +55,12 @@ fun rememberInterstitialAd(
             AdRequestFactory.create(),
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(error: LoadAdError) {
-                    Timber.tag("nt.dung").e(error.message)
                     interstitialAd.value?.fullScreenContentCallback = null
                     interstitialAd.value = null
                     onAdLoadFailed()
                 }
 
                 override fun onAdLoaded(ad: InterstitialAd) {
-                    Timber.tag("nt.dung").e("Ad Loaded!!!!")
                     interstitialAd.value = ad
                     interstitialAd.value?.fullScreenContentCallback = fullContentCallback
                 }

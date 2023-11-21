@@ -38,6 +38,7 @@ object Compose : Dependency() {
     private const val accompanistSwipeRefresh = "com.google.accompanist:accompanist-swiperefresh:${Versions.accompanistSwipeRefresh}"
     private const val liveData = "androidx.compose.runtime:runtime-livedata:${Versions.liveData}"
     private const val googleFont = "androidx.compose.ui:ui-text-google-fonts:${Versions.googleFont}"
+    private const val systemUiController = "com.google.accompanist:accompanist-systemuicontroller:0.23.1"
 
     override fun implementations() = listOf<String>(
         ui,
@@ -56,7 +57,7 @@ object Compose : Dependency() {
         accompanistPermission,
         accompanistSwipeRefresh,
         googleFont,
-        liveData
+        systemUiController
     )
 
     override fun debugImplementations() = listOf<String>(

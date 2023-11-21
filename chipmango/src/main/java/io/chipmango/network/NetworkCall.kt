@@ -2,7 +2,6 @@ package io.chipmango.network
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -47,20 +46,13 @@ fun <T> flowApiCall(
 }
 
 @Composable
-fun <T> rememberFlowState(
-    action: FlowAction,
+fun <T> rememberFlow(
+    controller: FlowController = rememberFlowController(),
     initialValue: T,
-    flow: () -> Flow<T>
-) = remember(key1 = action) {
-    if (action is FlowAction.Pending) flow<T> { emit(initialValue) }
-    else {
-        flow.invoke()
-    }
-}
-
-@Composable
-fun rememberFlowAction(initialAction: FlowAction = FlowAction.Pending) = remember {
-    mutableStateOf(initialAction)
+    flowApi: () -> Flow<T>
+) = remember(key1 = controller.state) {
+    if (controller.state is FlowState.Pending) flow { emit(initialValue) }
+    else flowApi.invoke()
 }
 
 @Composable
