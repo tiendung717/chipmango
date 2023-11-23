@@ -34,26 +34,29 @@ internal fun JcAdBanner(
     modifier: Modifier,
     isTestAd: Boolean,
     adUnit: AdUnit,
-    onAdFailedToLoad: () -> Unit = {}
+    onAdFailedToLoad: (LoadAdError) -> Unit = {}
 ) {
     val bannerAd = remember {
         if (isTestAd) TestBanner else adUnit
     }
-    val activity = LocalContext.current as ComponentActivity
-    val adSize = remember { getAdSize(activity) }
     var adView: AdView? = remember { null }
     var adLoaded by remember { mutableStateOf(false) }
-    Box(
-        modifier = modifier.height(adSize.height.dp)
-    ) {
+
+    val activity = LocalContext.current as ComponentActivity
+    val adSize = rememberBannerSize(activity)
+    val adListener = rememberBannerAdListener(
+        onAdFailedToLoad = onAdFailedToLoad,
+        onAdLoaded = { adLoaded = true }
+    )
+
+    Box(modifier = modifier.height(adSize.height.dp)) {
         if (!adLoaded) {
             AndroidView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(),
                 factory = { context ->
-                    LayoutInflater.from(context)
-                        .inflate(R.layout.template_banner_loading, null, false)
+                    LayoutInflater.from(context).inflate(R.layout.template_banner_loading, null, false)
                 }
             )
         }
@@ -63,21 +66,10 @@ internal fun JcAdBanner(
             factory = {
                 adView = AdView(it)
                     .apply {
-                        setAdSize(adSize)
-                        adUnitId = bannerAd.unitId
-                    }.also {
-                        it.adListener = object : AdListener() {
-                            override fun onAdFailedToLoad(error: LoadAdError) {
-                                Timber.e(error.message)
-                                onAdFailedToLoad()
-                            }
-
-                            override fun onAdLoaded() {
-                                super.onAdLoaded()
-                                adLoaded = true
-                            }
-                        }
-                        it.loadAd(AdRequestFactory.create())
+                        this.setAdSize(adSize)
+                        this.adUnitId = bannerAd.unitId
+                        this.adListener = adListener
+                        this.loadAd(AdRequestFactory.create())
                     }
                 adView!!
             }
@@ -91,8 +83,8 @@ internal fun JcAdBanner(
     }
 }
 
-@SuppressLint("VisibleForTests")
-private fun getAdSize(activity: Activity): AdSize {
+@Composable
+private fun rememberBannerSize(activity: Activity) = remember {
     val adWidthPixels = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         val windowMetrics: WindowMetrics = activity.windowManager.currentWindowMetrics
         val bounds = windowMetrics.bounds
@@ -106,5 +98,20 @@ private fun getAdSize(activity: Activity): AdSize {
 
     val density: Float = activity.resources.displayMetrics.density
     val adWidth = (adWidthPixels / density).toInt()
-    return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity, adWidth)
+    AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity, adWidth)
+}
+
+@Composable
+private fun rememberBannerAdListener(onAdFailedToLoad: (LoadAdError) -> Unit, onAdLoaded: () -> Unit) = remember {
+    object : AdListener() {
+        override fun onAdFailedToLoad(error: LoadAdError) {
+            Timber.e(error.message)
+            onAdFailedToLoad(error)
+        }
+
+        override fun onAdLoaded() {
+            super.onAdLoaded()
+            onAdLoaded()
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package io.chipmango.ad.native
 
+import android.content.Context
 import android.view.LayoutInflater
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,31 +42,22 @@ internal fun JcAdNative(
     val ad = remember {
         if (isTestAd) TestNative else adUnit
     }
-
-    val adLoader = remember {
-        AdLoader.Builder(context, ad.unitId)
-            .forNativeAd { ad: NativeAd ->
-                nativeAd = ad
-            }
-            .withAdListener(object : AdListener() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    Timber.tag("nt.dung").e(adError.message)
-                }
-
-                override fun onAdLoaded() {
-                    super.onAdLoaded()
-                    adLoaded = true
-                }
-            })
-            .withNativeAdOptions(
-                NativeAdOptions.Builder()
-                    .build()
-            )
-            .build()
-    }
+    val nativeAdLoader = rememberNativeAdListener(
+        context = context,
+        ad = ad,
+        onAdLoadFailed = {
+            Timber.tag("nt.dung").e(it.message)
+        },
+        onAdLoaded = {
+            adLoaded = true
+        },
+        onNativeAdLoaded = {
+            nativeAd = it
+        }
+    )
 
     DisposableEffect(ad) {
-        adLoader.loadAd(AdRequestFactory.create())
+        nativeAdLoader.loadAd(AdRequestFactory.create())
         onDispose {
             nativeAd?.destroy()
         }
@@ -101,4 +93,33 @@ internal fun TemplateNativeBanner(modifier: Modifier, darkMode: Boolean, ad: Nat
             it.render(ad, darkMode)
         }
     )
+}
+
+@Composable
+private fun rememberNativeAdListener(
+    context: Context,
+    ad: AdUnit,
+    onAdLoadFailed: (LoadAdError) -> Unit,
+    onAdLoaded: () -> Unit,
+    onNativeAdLoaded: (NativeAd) -> Unit
+) = remember {
+    AdLoader.Builder(context, ad.unitId)
+        .forNativeAd { ad: NativeAd ->
+            onNativeAdLoaded(ad)
+        }
+        .withAdListener(object : AdListener() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                onAdLoadFailed(adError)
+            }
+
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                onAdLoaded()
+            }
+        })
+        .withNativeAdOptions(
+            NativeAdOptions.Builder()
+                .build()
+        )
+        .build()
 }

@@ -1,11 +1,13 @@
 package io.chipmango.theme.colors
 
-import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.staticCompositionLocalOf
 
-data class ColorSet(
-    val Stronger: Color = Color.Unspecified,
-    val Strong: Color = Color.Unspecified,
-    val Normal: Color = Color.Unspecified,
-    val Weak: Color = Color.Unspecified,
-    val Weaker: Color = Color.Unspecified,
+abstract class ColorSet
+
+class ThemeColor(
+    val light: ColorSet,
+    val dark: ColorSet
 )
+
+val defaultColorSet: ColorSet? = null
+val LocalColorSet = staticCompositionLocalOf { defaultColorSet }
