@@ -51,6 +51,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":chipmango"))
     implementation(project(":chipmango-ad"))
     implementation(project(":chipmango-permission"))
 
