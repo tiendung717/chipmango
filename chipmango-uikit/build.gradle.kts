@@ -8,7 +8,6 @@ plugins {
     id("kotlin-kapt")
     id("kotlin-android")
     id("kotlin-parcelize")
-    id("dagger.hilt.android.plugin")
 }
 
 val versions = rootProject.file("version.properties")
@@ -53,6 +52,7 @@ android {
 
     buildFeatures {
         buildConfig = true
+        compose = true
     }
 
     composeOptions {
@@ -73,7 +73,6 @@ apply {
 dependencies {
     dependOn(
         deps.AndroidX,
-        deps.Hilt,
         deps.Log,
         deps.Compose
     )
