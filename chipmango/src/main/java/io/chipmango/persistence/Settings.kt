@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class Setting<T>(val key: String, val default: T)
+open class Setting<T>(val key: String, val default: T)
 
 @Composable
 fun Setting<Boolean>.booleanState(waitForFirstValue: Boolean = false): State<Boolean> {
