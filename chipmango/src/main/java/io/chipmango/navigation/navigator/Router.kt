@@ -7,7 +7,7 @@ import io.chipmango.navigation.destination.Destination
 fun Destination.withArguments(arguments: Map<String, Any?>): String {
     val uri = Uri.parse(route)
     val newUri = Uri.Builder()
-        .scheme("https")
+        .scheme(uri.scheme)
         .authority(uri.authority)
         .apply {
             uri.pathSegments.forEach {
