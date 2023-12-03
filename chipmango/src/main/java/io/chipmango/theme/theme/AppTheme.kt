@@ -1,6 +1,7 @@
 package io.chipmango.theme.theme
 
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
@@ -31,7 +32,11 @@ fun AppTheme(
     CompositionLocalProvider(LocalColorSet provides colors) {
         MaterialTheme(
             colorScheme = if (useDarkTheme) MaterialDarkColors else MaterialLightColors,
-            content = content,
+            content = {
+                Surface(
+                    content = content
+                )
+            },
             typography = MaterialTheme.typography.copy(
                 displayLarge = MaterialTheme.typography.displayLarge.copy(
                     fontFamily = fontFamily
