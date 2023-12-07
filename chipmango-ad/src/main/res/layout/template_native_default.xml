@@ -11,14 +11,38 @@
         android:paddingHorizontal="12dp"
         android:paddingVertical="8dp">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FF9800"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:text="Ad"
+            android:id="@+id/adText"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="@id/adChoiceView"
+            app:layout_constraintStart_toStartOf="@id/ad_app_icon"
+            app:layout_constraintTop_toTopOf="@id/adChoiceView" />
+
+        <Space
+            android:id="@+id/adChoiceView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/ad_app_icon"
             android:layout_width="64dp"
             android:layout_height="64dp"
+            android:layout_marginTop="8dp"
             android:background="@color/text2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/adText" />
 
         <TextView
             android:id="@+id/ad_headline"
@@ -35,7 +59,7 @@
             app:layout_constraintBottom_toTopOf="@id/ad_body"
             app:layout_constraintEnd_toStartOf="@id/ad_call_to_action"
             app:layout_constraintStart_toEndOf="@id/ad_app_icon"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ad_app_icon"
             app:layout_constraintVertical_chainStyle="packed"
             app:lineHeight="20sp"
             tools:text="Test" />
@@ -70,7 +94,7 @@
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ad_app_icon"
             tools:text="Install" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
