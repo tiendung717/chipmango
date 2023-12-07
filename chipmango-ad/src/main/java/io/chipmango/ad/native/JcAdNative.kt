@@ -2,6 +2,9 @@ package io.chipmango.ad.native
 
 import android.content.Context
 import android.view.LayoutInflater
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
@@ -11,13 +14,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
+import com.google.android.gms.ads.nativead.NativeAdOptions.ADCHOICES_TOP_RIGHT
+import com.google.android.gms.ads.nativead.NativeAdOptions.AdChoicesPlacement
 import io.chipmango.ad.request.AdRequestFactory
 import io.chipmango.ad.AdUnit
 import io.chipmango.ad.R
@@ -31,9 +41,12 @@ internal fun JcAdNative(
     modifier: Modifier = Modifier,
     isTestAd: Boolean,
     isDarkMode: Boolean,
+    containerColor: Color,
+    shape: Shape,
+    borderColor: Color,
     adUnit: AdUnit = TestNative,
     adLayout: @Composable (Boolean, NativeAd) -> Unit = { darkMode, ad ->
-        TemplateNativeBanner(modifier, darkMode, ad)
+        TemplateNativeBanner(darkMode, ad)
     }
 ) {
     val context = LocalContext.current
@@ -63,7 +76,13 @@ internal fun JcAdNative(
         }
     }
 
-    Box(modifier = modifier) {
+    Box(
+        modifier = modifier
+            .background(containerColor, shape)
+            .border(1.dp, borderColor, shape)
+            .clip(shape)
+            .animateContentSize()
+    ) {
         if (!adLoaded) {
             AndroidView(
                 modifier = Modifier.fillMaxWidth(),
@@ -81,9 +100,9 @@ internal fun JcAdNative(
 }
 
 @Composable
-internal fun TemplateNativeBanner(modifier: Modifier, darkMode: Boolean, ad: NativeAd) {
+internal fun TemplateNativeBanner(darkMode: Boolean, ad: NativeAd) {
     AndroidView(
-        modifier = modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         factory = {
             TemplateNativeAdView(it).apply {
                 render(ad, darkMode)
@@ -119,6 +138,7 @@ private fun rememberNativeAdListener(
         })
         .withNativeAdOptions(
             NativeAdOptions.Builder()
+                .setAdChoicesPlacement(ADCHOICES_TOP_RIGHT)
                 .build()
         )
         .build()

@@ -11,4 +11,9 @@ class App : CoreApplication() {
     override fun isLogEnabled(): Boolean {
         return true
     }
+
+    override fun onCreate() {
+        super.onCreate()
+        ChipmangoAds.init(this)
+    }
 }
