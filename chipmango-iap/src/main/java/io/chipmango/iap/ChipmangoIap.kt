@@ -73,7 +73,10 @@ class ChipmangoIap @Inject constructor(
             }
 
             override fun onBillingServiceDisconnected() {
-                connectBillingService()
+                coroutineScope.launch {
+                    delay(5_000)
+                    connectBillingService()
+                }
             }
         })
     }
