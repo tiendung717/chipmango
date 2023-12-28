@@ -21,6 +21,6 @@ fun List<Offering>.findPackageByProductId(productId: String): Package? {
     return map { it.availablePackages }.flatten().find { it.product.id == productId }
 }
 
-fun List<PaywallOffer>.findPackageByProductId(productId: String): Package? {
+fun List<PaywallOffer>.findPackageWithProductId(productId: String): Package? {
     return map { it.offering }.findPackageByProductId(productId)
 }
