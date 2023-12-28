@@ -20,7 +20,7 @@ val patch = props["patchVersion"].toString().toInt()
 
 android {
     namespace = "io.chipmango.revenuecat"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 24
