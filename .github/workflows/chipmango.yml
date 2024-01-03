@@ -39,6 +39,10 @@ jobs:
       - name: Chipmango-UIKit - Release build
         run: ./gradlew :chipmango-uikit:assembleRelease
 
+          # Builds the release artifacts of the library
+      - name: Chipmango-Revenue-Cat - Release build
+        run: ./gradlew :chipmango-revenue-cat:assembleRelease
+
         # Generates other artifacts (javadocJar is optional)
       - name: Source jar
         run: ./gradlew androidSourcesJar
