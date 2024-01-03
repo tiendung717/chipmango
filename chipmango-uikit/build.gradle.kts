@@ -71,6 +71,7 @@ apply {
 }
 
 dependencies {
+    implementation("io.github.tiendung717:chipmango:0.2.4")
     dependOn(
         deps.AndroidX,
         deps.Log,
