@@ -3,6 +3,7 @@ package io.chipmango.revenuecat.extensions
 import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PackageType
+import com.revenuecat.purchases.models.StoreProduct
 import io.chipmango.revenuecat.PaywallOffer
 import java.util.Locale
 
@@ -23,4 +24,12 @@ fun List<Offering>.findPackageByProductId(productId: String): Package? {
 
 fun List<PaywallOffer>.findPackageWithProductId(productId: String): Package? {
     return map { it.offering }.findPackageByProductId(productId)
+}
+
+fun List<Offering>.findPackage(regex: String): Package? {
+    return map { it.availablePackages }.flatten().find { it.product.id.contains(regex, true) }
+}
+
+fun StoreProduct.isMatch(regex: String): Boolean {
+    return id.contains(regex, true)
 }
