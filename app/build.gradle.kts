@@ -11,12 +11,12 @@ plugins {
 
 android {
     namespace = "com.solid.test"
-    compileSdk = 34
+    compileSdk = Build.compileSdk
 
     defaultConfig {
         applicationId = "com.solid.test"
-        minSdk = 24
-        targetSdk = 33
+        minSdk = Build.minSdk
+        targetSdk = Build.targetSdk
         versionCode = 1
         versionName = "1.0"
 
@@ -54,6 +54,8 @@ dependencies {
     implementation(project(":chipmango"))
     implementation(project(":chipmango-ad"))
     implementation(project(":chipmango-permission"))
+    implementation(project(":chipmango-uikit"))
+    implementation(project(":chipmango-rating"))
 
     dependOn(
         deps.AndroidX,

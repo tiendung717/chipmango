@@ -3,6 +3,7 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+        maven("https://jitpack.io")
     }
 }
 dependencyResolutionManagement {
@@ -24,3 +25,4 @@ include(":chipmango-notification")
 include(":chipmango-permission")
 include(":chipmango-uikit")
 include(":chipmango-revenue-cat")
+include(":chipmango-rating")

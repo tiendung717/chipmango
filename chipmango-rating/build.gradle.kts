@@ -8,6 +8,7 @@ plugins {
     id("kotlin-kapt")
     id("kotlin-android")
     id("kotlin-parcelize")
+    id("dagger.hilt.android.plugin")
 }
 
 val versions = rootProject.file("version.properties")
@@ -18,7 +19,7 @@ val minor = props["minorVersion"].toString().toInt()
 val patch = props["patchVersion"].toString().toInt()
 
 android {
-    namespace = "io.chipmango.uikit"
+    namespace = "io.chipmango.rating"
     compileSdk = Build.compileSdk
 
     defaultConfig {
@@ -62,7 +63,7 @@ android {
 
 ext {
     set("PUBLISH_GROUP_ID", "io.github.tiendung717")
-    set("PUBLISH_ARTIFACT_ID", "chipmango-uikit")
+    set("PUBLISH_ARTIFACT_ID", "chipmango-rating")
     set("PUBLISH_VERSION", "$major.$minor.$patch")
 }
 
@@ -72,9 +73,12 @@ apply {
 
 dependencies {
     implementation("io.github.tiendung717:chipmango:0.2.4")
+    implementation("io.github.a914-gowtham:compose-ratingbar:1.1.0")
+
     dependOn(
         deps.AndroidX,
         deps.Log,
-        deps.Compose
+        deps.Compose,
+        deps.Hilt
     )
 }
