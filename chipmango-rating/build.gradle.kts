@@ -8,6 +8,7 @@ plugins {
     id("kotlin-kapt")
     id("kotlin-android")
     id("kotlin-parcelize")
+    id("dagger.hilt.android.plugin")
 }
 
 val versions = rootProject.file("version.properties")
@@ -72,10 +73,12 @@ apply {
 
 dependencies {
     implementation("io.github.tiendung717:chipmango:0.2.4")
+    implementation("io.github.a914-gowtham:compose-ratingbar:1.1.0")
 
     dependOn(
         deps.AndroidX,
         deps.Log,
-        deps.Compose
+        deps.Compose,
+        deps.Hilt
     )
 }

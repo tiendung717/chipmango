@@ -1,5 +1,8 @@
 package io.chipmango.rating
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -23,11 +26,12 @@ import androidx.compose.ui.unit.dp
 import io.chipmango.theme.typography.UIKitTypography
 
 @Composable
-fun ContentAction(
+internal fun ContentAction(
     modifier: Modifier,
     @DrawableRes image: Int,
     title: String,
     message: String,
+    positiveText: String,
     titleTextColor: Color,
     messageTextColor: Color,
     positiveButtonContainerColor: Color,
@@ -72,7 +76,7 @@ fun ContentAction(
         ) {
             Text(
                 modifier = Modifier,
-                text = "Rate us on the Playstore",
+                text = positiveText,
                 style = UIKitTypography.Body2Medium14,
                 color = positiveButtonTextColor
             )
@@ -106,6 +110,26 @@ private fun PreviewContentRating() {
         negativeButtonTextColor = Color.Gray,
         onPositiveClick = { /*TODO*/ },
         onNegativeClick = {},
-        positiveButtonContainerColor = Color.Blue
+        positiveButtonContainerColor = Color.Blue,
+        positiveText = "Rate"
     )
+}
+
+internal fun Context.rateApp(applicationId: String) {
+    val uri = Uri.parse("market://details?id=$applicationId")
+    val backupUri =
+        Uri.parse("http://play.google.com/store/apps/details?id=$applicationId")
+    try {
+        startActivity(Intent(Intent.ACTION_VIEW, uri))
+    } catch (ex: Exception) {
+        startActivity(Intent(Intent.ACTION_VIEW, backupUri))
+    }
+}
+
+internal fun Context.sendFeedback(email: String, appName: String) {
+    val intent = Intent(Intent.ACTION_SEND)
+    intent.type = "text/email"
+    intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+    intent.putExtra(Intent.EXTRA_SUBJECT, "[$appName] Feedback")
+    startActivity(Intent.createChooser(intent, "Send Feedback:"))
 }
