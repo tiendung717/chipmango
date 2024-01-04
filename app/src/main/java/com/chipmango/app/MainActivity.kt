@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.chipmango.rating.AppRatingDialog
 import io.chipmango.rating.viewmodel.RatingViewModel
 import io.chipmango.theme.theme.AppTheme
+import io.chipmango.theme.typography.UIKitTypography
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -54,7 +55,10 @@ class MainActivity : AppCompatActivity() {
                     ratingTitle = "Rating title",
                     ratingMessage = "Rating message",
                     feedbackTitle = "Feedback title",
-                    feedbackMessage = "Feedback message"
+                    feedbackMessage = "Feedback message",
+                    titleTextStyle = UIKitTypography.Body1Medium16,
+                    messageTextStyle = UIKitTypography.Body2Regular14,
+                    buttonTextStyle = UIKitTypography.Body1Medium16
                 )
             }
         }

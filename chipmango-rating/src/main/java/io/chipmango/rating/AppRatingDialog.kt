@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,7 +47,10 @@ fun AppRatingDialog(
     ratingTitle: String,
     ratingMessage: String,
     feedbackTitle: String,
-    feedbackMessage: String
+    feedbackMessage: String,
+    titleTextStyle: TextStyle,
+    messageTextStyle: TextStyle,
+    buttonTextStyle: TextStyle
 ) {
     val context = LocalContext.current
     var rateStep: RateStep by remember {
@@ -95,7 +99,9 @@ fun AppRatingDialog(
                                     rateStep = RateStep.Negative
                                 },
                                 question = question,
-                                questionImage = questionImage
+                                questionImage = questionImage,
+                                titleTextStyle = titleTextStyle,
+                                buttonTextStyle = buttonTextStyle
                             )
                         }
 
@@ -114,7 +120,10 @@ fun AppRatingDialog(
                                     dismissed = true
                                 },
                                 positiveButtonContainerColor = positiveButtonContainerColor,
-                                positiveText = "Rate us on the Playstore"
+                                positiveText = "Rate us on the Playstore",
+                                titleTextStyle = titleTextStyle,
+                                buttonTextStyle = buttonTextStyle,
+                                messageTextStyle = messageTextStyle
                             )
                         }
 
@@ -131,7 +140,10 @@ fun AppRatingDialog(
                                 onPositiveClick = { context.sendFeedback(email, appName) },
                                 onNegativeClick = { dismissed = true },
                                 positiveButtonContainerColor = positiveButtonContainerColor,
-                                positiveText = "Send feedback"
+                                positiveText = "Send feedback",
+                                titleTextStyle = titleTextStyle,
+                                buttonTextStyle = buttonTextStyle,
+                                messageTextStyle = messageTextStyle
                             )
                         }
                     }
