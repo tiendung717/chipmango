@@ -1,26 +1,35 @@
 import deps.dependOn
+import org.jetbrains.kotlin.konan.properties.Properties
+import java.io.FileInputStream
 
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("kotlin-android")
     id("kotlin-parcelize")
-    id("dagger.hilt.android.plugin")
 }
 
+val versions = rootProject.file("version.properties")
+val props = Properties()
+props.load(FileInputStream(versions))
+val major = props["majorVersion"].toString().toInt()
+val minor = props["minorVersion"].toString().toInt()
+val patch = props["patchVersion"].toString().toInt()
+
 android {
-    namespace = "com.solid.test"
+    namespace = "io.chipmango.rating"
     compileSdk = Build.compileSdk
 
     defaultConfig {
-        applicationId = "com.solid.test"
         minSdk = Build.minSdk
-        targetSdk = Build.targetSdk
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
+
+        aarMetadata {
+            minCompileSdk = 29
+        }
     }
 
     buildTypes {
@@ -36,13 +45,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget =  JavaVersion.VERSION_17.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     buildFeatures {
-        compose = true
         buildConfig = true
+        compose = true
     }
 
     composeOptions {
@@ -50,18 +60,22 @@ android {
     }
 }
 
+ext {
+    set("PUBLISH_GROUP_ID", "io.github.tiendung717")
+    set("PUBLISH_ARTIFACT_ID", "chipmango-rating")
+    set("PUBLISH_VERSION", "$major.$minor.$patch")
+}
+
+apply {
+    from("${rootDir}/scripts/publish-module.gradle")
+}
+
 dependencies {
-    implementation(project(":chipmango"))
-    implementation(project(":chipmango-ad"))
-    implementation(project(":chipmango-permission"))
-    implementation(project(":chipmango-uikit"))
-    implementation(project(":chipmango-rating"))
+    implementation("io.github.tiendung717:chipmango:0.2.4")
 
     dependOn(
         deps.AndroidX,
-        deps.Compose,
-        deps.Hilt,
         deps.Log,
-        deps.Ads
+        deps.Compose
     )
 }

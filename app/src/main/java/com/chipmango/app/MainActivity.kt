@@ -28,6 +28,7 @@ import io.chipmango.ad.AdUnit
 import io.chipmango.ad.ChipmangoBannerAd
 import io.chipmango.ad.ChipmangoNativeAd
 import io.chipmango.permission.NotificationRequester
+import io.chipmango.rating.AppRatingDialog
 import io.chipmango.theme.colors.LocalColorSet
 import io.chipmango.theme.di.themeColor
 import io.chipmango.theme.theme.AppTheme
@@ -43,6 +44,10 @@ class MainActivity : AppCompatActivity() {
             }
             AppTheme(useDarkTheme = darkMode) {
                 UiKitApp(containerColor = themeColors().background.Normal)
+
+                AppRatingDialog {
+
+                }
             }
         }
     }
