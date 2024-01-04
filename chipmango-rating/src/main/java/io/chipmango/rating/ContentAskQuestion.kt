@@ -21,10 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gowtham.ratingbar.RatingBar
-import io.chipmango.theme.typography.UIKitTypography
 
 @Composable
 internal fun ContentAskQuestion(
@@ -35,7 +35,9 @@ internal fun ContentAskQuestion(
     positiveButtonColor: Color,
     positiveButtonContainerColor: Color,
     onPositiveClick: () -> Unit,
-    onNegativeClick: () -> Unit
+    onNegativeClick: () -> Unit,
+    titleTextStyle: TextStyle,
+    buttonTextStyle: TextStyle
 ) {
     var rating: Float by remember { mutableFloatStateOf(4f) }
 
@@ -53,7 +55,7 @@ internal fun ContentAskQuestion(
 
         Text(
             text = question,
-            style = UIKitTypography.Body1Medium16,
+            style = titleTextStyle,
             color = contentColor
         )
 
@@ -81,28 +83,10 @@ internal fun ContentAskQuestion(
             Text(
                 modifier = Modifier,
                 text = stringResource(R.string.submit),
-                style = UIKitTypography.Body1Medium16,
+                style = buttonTextStyle,
                 color = positiveButtonColor
             )
         }
-
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewContentAskQuestion() {
-    ContentAskQuestion(
-        modifier = Modifier.fillMaxWidth(),
-        contentColor = Color.Black,
-        positiveButtonColor = Color.Red,
-        positiveButtonContainerColor = Color.Black,
-        onPositiveClick = {
-
-        },
-        questionImage = R.drawable.ic_rating,
-        question = "How you satisfy our app?"
-    ) {
 
     }
 }

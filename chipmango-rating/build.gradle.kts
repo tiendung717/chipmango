@@ -72,7 +72,6 @@ apply {
 }
 
 dependencies {
-    implementation("io.github.tiendung717:chipmango:0.2.4")
     implementation("io.github.a914-gowtham:compose-ratingbar:1.1.0")
 
     dependOn(

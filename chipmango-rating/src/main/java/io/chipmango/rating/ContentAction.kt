@@ -20,10 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.chipmango.theme.typography.UIKitTypography
 
 @Composable
 internal fun ContentAction(
@@ -38,7 +38,10 @@ internal fun ContentAction(
     positiveButtonTextColor: Color,
     negativeButtonTextColor: Color,
     onPositiveClick: () -> Unit,
-    onNegativeClick: () -> Unit
+    onNegativeClick: () -> Unit,
+    titleTextStyle: TextStyle,
+    messageTextStyle: TextStyle,
+    buttonTextStyle: TextStyle
 ) {
     Column(
         modifier = modifier,
@@ -53,13 +56,13 @@ internal fun ContentAction(
 
         Text(
             text = title,
-            style = UIKitTypography.Body1Medium16,
+            style = titleTextStyle,
             color = titleTextColor
         )
 
         Text(
             text = message,
-            style = UIKitTypography.Body1Regular16,
+            style = messageTextStyle,
             color = messageTextColor,
             textAlign = TextAlign.Center
         )
@@ -77,7 +80,7 @@ internal fun ContentAction(
             Text(
                 modifier = Modifier,
                 text = positiveText,
-                style = UIKitTypography.Body2Medium14,
+                style = buttonTextStyle,
                 color = positiveButtonTextColor
             )
         }
@@ -86,33 +89,11 @@ internal fun ContentAction(
             Text(
                 modifier = Modifier,
                 text = "Not now",
-                style = UIKitTypography.Body2Medium14,
+                style = buttonTextStyle,
                 color = negativeButtonTextColor
             )
         }
     }
-}
-
-@Preview
-@Composable
-private fun PreviewContentRating() {
-    ContentAction(
-        modifier = Modifier.fillMaxWidth(),
-        image = R.drawable.ic_rating,
-        title = "Your opinion matters to us!",
-        message = "We coded and designed with all our might,\n" +
-                "Please leave a positive review, make our day bright!\n" +
-                "Five stars would be oh so appreciated,\n" +
-                "More features and updates, expedited!",
-        titleTextColor = Color.Black,
-        messageTextColor = Color.Gray,
-        positiveButtonTextColor = Color.White,
-        negativeButtonTextColor = Color.Gray,
-        onPositiveClick = { /*TODO*/ },
-        onNegativeClick = {},
-        positiveButtonContainerColor = Color.Blue,
-        positiveText = "Rate"
-    )
 }
 
 internal fun Context.rateApp(applicationId: String) {
