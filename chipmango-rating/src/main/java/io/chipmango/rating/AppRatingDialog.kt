@@ -35,6 +35,7 @@ fun AppRatingDialog(
     appName: String,
     email: String,
     frequency: Int,
+    backgroundColor: Color,
     positiveButtonContainerColor: Color,
     positiveButtonTextColor: Color,
     negativeButtonTextColor: Color,
@@ -77,7 +78,7 @@ fun AppRatingDialog(
         ) {
             Surface(
                 shape = RoundedCornerShape(8.dp),
-                color = Color.White
+                color = backgroundColor
             ) {
                 AnimatedContent(
                     modifier = Modifier
