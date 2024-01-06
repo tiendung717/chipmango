@@ -62,7 +62,7 @@ internal fun ContentAskQuestion(
             textAlign = TextAlign.Center
         )
 
-        RatingBar(
+        AppRatingBar(
             modifier = Modifier,
             value = rating,
             onRatingChanged = {

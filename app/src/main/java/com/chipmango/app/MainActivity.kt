@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val darkMode by remember {
-                mutableStateOf(false)
+                mutableStateOf(true)
             }
 
 
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                     titleTextColor = MaterialTheme.colorScheme.onBackground,
                     messageTextColor = MaterialTheme.colorScheme.onBackground,
                     questionImage = R.drawable.ic_rating_question,
-                    ratingImage = io.chipmango.rating.R.drawable.ic_rating,
+                    ratingImage = R.drawable.ic_rating_question,
                     feedbackImage = R.drawable.ic_rating_feedback,
                     question = "How satisfied are you with Teleprompter?",
                     ratingTitle = "Your opinion matters to us!",
@@ -65,7 +65,8 @@ class MainActivity : AppCompatActivity() {
                         fontWeight = FontWeight.Bold
                     ),
                     messageTextStyle = MaterialTheme.typography.bodyLarge,
-                    buttonTextStyle = MaterialTheme.typography.bodyLarge
+                    buttonTextStyle = MaterialTheme.typography.bodyLarge,
+                    backgroundColor = MaterialTheme.colorScheme.background
                 )
             }
         }
