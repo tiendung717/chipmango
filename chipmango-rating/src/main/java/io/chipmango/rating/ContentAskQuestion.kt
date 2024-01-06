@@ -19,9 +19,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gowtham.ratingbar.RatingBar
@@ -56,7 +58,8 @@ internal fun ContentAskQuestion(
         Text(
             text = question,
             style = titleTextStyle,
-            color = contentColor
+            color = contentColor,
+            textAlign = TextAlign.Center
         )
 
         RatingBar(
@@ -64,7 +67,9 @@ internal fun ContentAskQuestion(
             value = rating,
             onRatingChanged = {
                 rating = it
-            }
+            },
+            activeColor = Color(0xFFFFC107),
+            inactiveColor = Color(0xFFFAEDBC),
         )
 
         Button(

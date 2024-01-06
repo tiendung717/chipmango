@@ -140,7 +140,7 @@ fun AppRatingDialog(
                                 onPositiveClick = { context.sendFeedback(email, appName) },
                                 onNegativeClick = { dismissed = true },
                                 positiveButtonContainerColor = positiveButtonContainerColor,
-                                positiveText = "Send feedback",
+                                positiveText = "Ok, sure!",
                                 titleTextStyle = titleTextStyle,
                                 buttonTextStyle = buttonTextStyle,
                                 messageTextStyle = messageTextStyle
