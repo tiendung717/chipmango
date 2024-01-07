@@ -102,7 +102,11 @@ fun AppRatingDialog(
                                 question = question,
                                 questionImage = questionImage,
                                 titleTextStyle = titleTextStyle,
-                                buttonTextStyle = buttonTextStyle
+                                buttonTextStyle = buttonTextStyle,
+                                negativeButtonTextColor = negativeButtonTextColor,
+                                onCancelClick = {
+                                    dismissed = true
+                                }
                             )
                         }
 
