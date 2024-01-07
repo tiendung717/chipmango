@@ -5,12 +5,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -36,16 +39,18 @@ internal fun ContentAskQuestion(
     contentColor: Color,
     positiveButtonColor: Color,
     positiveButtonContainerColor: Color,
+    negativeButtonTextColor: Color,
     onPositiveClick: () -> Unit,
     onNegativeClick: () -> Unit,
     titleTextStyle: TextStyle,
-    buttonTextStyle: TextStyle
+    buttonTextStyle: TextStyle,
+    onCancelClick: () -> Unit
 ) {
     var rating: Float by remember { mutableFloatStateOf(4f) }
 
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -55,12 +60,16 @@ internal fun ContentAskQuestion(
             contentDescription = null
         )
 
+        Spacer(modifier = Modifier.height(16.dp))
+
         Text(
             text = question,
             style = titleTextStyle,
             color = contentColor,
             textAlign = TextAlign.Center
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         AppRatingBar(
             modifier = Modifier,
@@ -71,6 +80,8 @@ internal fun ContentAskQuestion(
             activeColor = Color(0xFFFFC107),
             inactiveColor = Color(0xFFFAEDBC),
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             modifier = Modifier.fillMaxWidth(),
@@ -90,6 +101,21 @@ internal fun ContentAskQuestion(
                 text = stringResource(R.string.submit),
                 style = buttonTextStyle,
                 color = positiveButtonColor
+            )
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        TextButton(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = onCancelClick,
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Text(
+                modifier = Modifier,
+                text = "Not now",
+                style = buttonTextStyle,
+                color = negativeButtonTextColor
             )
         }
 
