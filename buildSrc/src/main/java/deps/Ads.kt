@@ -4,7 +4,7 @@ object Ads : Dependency() {
 
     object Versions {
         const val admob = "22.4.0"
-        const val ump = "2.0.0"
+        const val ump = "2.1.0"
     }
 
     private const val admob = "com.google.android.gms:play-services-ads:${Versions.admob}"
