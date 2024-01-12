@@ -21,53 +21,54 @@ import io.chipmango.rating.viewmodel.RatingViewModel
 import io.chipmango.theme.theme.AppTheme
 import io.chipmango.theme.typography.UIKitTypography
 import com.solid.test.R
+import io.chipmango.ad.AdContainerActivity
+import io.chipmango.ad.AdUnit
+import io.chipmango.ad.ChipmangoAds
+import io.chipmango.ad.ChipmangoBannerAd
+import io.chipmango.ad.ChipmangoNativeAd
+import io.chipmango.uikit.UiKitApp
+import io.chipmango.uikit.scaffold.AppScaffold
+import javax.inject.Inject
+
+data object BlankAdUnit : AdUnit("")
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AdContainerActivity() {
+
     private val ratingViewModel: RatingViewModel by viewModels<RatingViewModel>()
+
+    override fun isAdEnabled(): Boolean {
+        return true
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val darkMode by remember {
-                mutableStateOf(true)
+                mutableStateOf(false)
             }
 
-
-
             AppTheme(useDarkTheme = darkMode) {
-//                UiKitApp(containerColor = themeColors().background.Normal)
-
-                Button(onClick = { ratingViewModel.record() }) {
-                    Text(text = "Rating record")
+                AppScaffold(
+                    containerColor = themeColors().background.Normal,
+                    bottomBar = {
+                        ChipmangoBannerAd(
+                            isTestAd = true,
+                            isPremium = false,
+                            adUnit = BlankAdUnit
+                        )
+                    },
+                    topBar = {
+                        ChipmangoNativeAd(
+                            isTestAd = true,
+                            isPremium = false,
+                            darkMode = false,
+                            adUnit = BlankAdUnit
+                        )
+                    }
+                ) {
+                    UiKitApp(containerColor = themeColors().background.Normal)
                 }
-
-                AppRatingDialog(
-                    ratingViewModel = ratingViewModel,
-                    applicationId = BuildConfig.APPLICATION_ID,
-                    appName = stringResource(id = R.string.app_name),
-                    email = "solidsoft.apps@gmail.com",
-                    frequency = 1,
-                    positiveButtonContainerColor = MaterialTheme.colorScheme.tertiary,
-                    positiveButtonTextColor = Color.White,
-                    negativeButtonTextColor = MaterialTheme.colorScheme.onBackground,
-                    titleTextColor = MaterialTheme.colorScheme.onBackground,
-                    messageTextColor = MaterialTheme.colorScheme.onBackground,
-                    questionImage = R.drawable.ic_rating_question,
-                    ratingImage = R.drawable.ic_rating_question,
-                    feedbackImage = R.drawable.ic_rating_feedback,
-                    question = "How satisfied are you with Teleprompter?",
-                    ratingTitle = "Your opinion matters to us!",
-                    ratingMessage = "We've toiled and we've strove, to make this app thrive. A positive rating, that's all we ask, to complete our task.",
-                    feedbackTitle = "Your opinion matters to us!",
-                    feedbackMessage = "Would you mind telling us what made you unpleasant?",
-                    titleTextStyle = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
-                    messageTextStyle = MaterialTheme.typography.bodyLarge,
-                    buttonTextStyle = MaterialTheme.typography.bodyLarge,
-                    backgroundColor = MaterialTheme.colorScheme.background
-                )
             }
         }
     }
