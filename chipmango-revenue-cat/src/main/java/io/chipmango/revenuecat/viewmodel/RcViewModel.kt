@@ -2,33 +2,36 @@ package io.chipmango.revenuecat.viewmodel
 
 import android.app.Activity
 import androidx.lifecycle.ViewModel
-import io.chipmango.revenuecat.PaywallOffer
+import androidx.lifecycle.viewModelScope
 import io.chipmango.revenuecat.RevenueCat
-import io.chipmango.revenuecat.PaywallState
+import io.chipmango.revenuecat.RcState
 import io.chipmango.revenuecat.PurchaseListener
 import com.revenuecat.purchases.Package
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PaywallViewModel @Inject constructor(
+class RcViewModel @Inject constructor(
     private val revenueCat: RevenueCat
 ) : ViewModel() {
 
-    val paywallState: MutableStateFlow<PaywallState> = MutableStateFlow(PaywallState.Loading)
+    val rcState: MutableStateFlow<RcState> = MutableStateFlow(RcState.Loading)
 
     fun fetchAvailableProducts() {
-        revenueCat.fetchAvailableProducts(
-            onError = { message ->
-                paywallState.update { PaywallState.Error(message) }
-            },
-            onSuccess = { offers ->
-                paywallState.update { PaywallState.Success(offers) }
-            }
-        )
+        viewModelScope.launch {
+            revenueCat.fetchAvailableProducts(
+                onError = { message ->
+                    rcState.update { RcState.Error(message) }
+                },
+                onSuccess = { offers ->
+                    rcState.update { RcState.Success(offers) }
+                }
+            )
+        }
     }
 
     fun makePurchase(
