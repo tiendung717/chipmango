@@ -4,7 +4,7 @@ import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PackageType
 import com.revenuecat.purchases.models.StoreProduct
-import io.chipmango.revenuecat.PaywallOffer
+import io.chipmango.revenuecat.RcOffer
 import java.util.Locale
 
 fun Package.formattedPrice(locale: Locale = Locale.getDefault()) : String {
@@ -22,7 +22,7 @@ fun List<Offering>.findPackageByProductId(productId: String): Package? {
     return map { it.availablePackages }.flatten().find { it.product.id == productId }
 }
 
-fun List<PaywallOffer>.findPackageWithProductId(productId: String): Package? {
+fun List<RcOffer>.findPackageWithProductId(productId: String): Package? {
     return map { it.offering }.findPackageByProductId(productId)
 }
 

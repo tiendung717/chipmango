@@ -42,15 +42,16 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
 
     fun fetchAvailableProducts(
         onError: (String) -> Unit,
-        onSuccess: (List<PaywallOffer>) -> Unit
+        onSuccess: (List<RcOffer>) -> Unit
     ) {
         Purchases.sharedInstance.getOfferingsWith(
             onError = { error ->
                 onError(error.message)
             },
             onSuccess = { offerings ->
+
                 val offers = offerings.all.map { entry ->
-                    PaywallOffer(
+                    RcOffer(
                         entry.value,
                         entry.value.getMetadataString("title", ""),
                         entry.value.getMetadataString("subtitle", ""),
