@@ -84,7 +84,8 @@ fun AppRatingDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(24.dp),
-                    targetState = rateStep, label = ""
+                    targetState = rateStep,
+                    label = ""
                 ) { step ->
                     when (step) {
                         RateStep.AskQuestion -> {
