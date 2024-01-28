@@ -3,6 +3,7 @@ package io.chipmango.revenuecat.viewmodel
 import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.revenuecat.purchases.CustomerInfo
 import io.chipmango.revenuecat.RevenueCat
 import io.chipmango.revenuecat.RcState
 import io.chipmango.revenuecat.PurchaseListener
@@ -48,5 +49,9 @@ class RcViewModel @Inject constructor(
 
     fun isPremium(): Flow<Boolean> {
         return revenueCat.isPremium()
+    }
+
+    fun savePurchase(customerInfo: CustomerInfo) {
+        revenueCat.savePurchase(customerInfo)
     }
 }
