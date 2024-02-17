@@ -2,8 +2,8 @@ package deps
 
 object Compose : Dependency() {
     object Versions {
-        const val composeCompiler = "1.5.3"
-        const val composeBom = "2023.10.01"
+        const val composeCompiler = "1.5.8"
+        const val composeBom = "2024.02.00"
         const val navigation = "2.7.4"
         const val hiltNavigation = "1.0.0"
         const val constraintLayout = "1.0.0"

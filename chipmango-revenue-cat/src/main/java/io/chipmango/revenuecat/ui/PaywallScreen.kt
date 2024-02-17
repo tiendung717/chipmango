@@ -9,13 +9,15 @@ import com.revenuecat.purchases.ui.revenuecatui.ExperimentalPreviewRevenueCatUIP
 import com.revenuecat.purchases.ui.revenuecatui.Paywall
 import com.revenuecat.purchases.ui.revenuecatui.PaywallListener
 import com.revenuecat.purchases.ui.revenuecatui.PaywallOptions
+import io.chipmango.revenuecat.extensions.hasActiveEntitlements
 import io.chipmango.revenuecat.viewmodel.RcViewModel
 
 @OptIn(ExperimentalPreviewRevenueCatUIPurchasesAPI::class)
 @Composable
 fun PaywallScreen(
     rcViewModel: RcViewModel = hiltViewModel(),
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onPurchaseCompleted: (Boolean) -> Unit
 ) {
     Paywall(
         options = PaywallOptions.Builder(onDismiss)
@@ -23,10 +25,14 @@ fun PaywallScreen(
                 object : PaywallListener {
                     override fun onPurchaseCompleted(customerInfo: CustomerInfo, storeTransaction: StoreTransaction) {
                         rcViewModel.savePurchase(customerInfo)
+                        val isPremium = customerInfo.entitlements.hasActiveEntitlements()
+                        onPurchaseCompleted(isPremium)
                     }
 
                     override fun onRestoreCompleted(customerInfo: CustomerInfo) {
                         rcViewModel.savePurchase(customerInfo)
+                        val isPremium = customerInfo.entitlements.hasActiveEntitlements()
+                        onPurchaseCompleted(isPremium)
                     }
                 }
             )
