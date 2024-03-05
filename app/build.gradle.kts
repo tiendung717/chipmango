@@ -14,7 +14,7 @@ android {
     compileSdk = Build.compileSdk
 
     defaultConfig {
-        applicationId = "com.solid.test"
+        applicationId = "com.solid.invoice"
         minSdk = Build.minSdk
         targetSdk = Build.targetSdk
         versionCode = 1
@@ -56,12 +56,13 @@ dependencies {
     implementation(project(":chipmango-permission"))
     implementation(project(":chipmango-uikit"))
     implementation(project(":chipmango-rating"))
-
+    implementation(project(":chipmango-revenue-cat"))
     dependOn(
         deps.AndroidX,
         deps.Compose,
         deps.Hilt,
         deps.Log,
-        deps.Ads
+        deps.Ads,
+        deps.RevenueCat
     )
 }

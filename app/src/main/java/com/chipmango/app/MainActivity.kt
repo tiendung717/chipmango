@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,8 +27,11 @@ import io.chipmango.ad.AdUnit
 import io.chipmango.ad.ChipmangoAds
 import io.chipmango.ad.ChipmangoBannerAd
 import io.chipmango.ad.ChipmangoNativeAd
+import io.chipmango.revenuecat.ui.PaywallScreen
+import io.chipmango.revenuecat.ui.UpgradeScreen
 import io.chipmango.uikit.UiKitApp
 import io.chipmango.uikit.scaffold.AppScaffold
+import timber.log.Timber
 import javax.inject.Inject
 
 data object BlankAdUnit : AdUnit("")
@@ -48,28 +52,17 @@ class MainActivity : AdContainerActivity() {
                 mutableStateOf(false)
             }
 
-            AppTheme(useDarkTheme = darkMode) {
-                AppScaffold(
-                    containerColor = themeColors().background.Normal,
-                    bottomBar = {
-                        ChipmangoBannerAd(
-                            isTestAd = true,
-                            isPremium = false,
-                            adUnit = BlankAdUnit
-                        )
-                    },
-                    topBar = {
-                        ChipmangoNativeAd(
-                            isTestAd = true,
-                            isPremium = false,
-                            darkMode = false,
-                            adUnit = BlankAdUnit
-                        )
+            UpgradeScreen(contentLoading = { /*TODO*/ }, contentError = {}) { offers ->
+                LaunchedEffect(Unit) {
+                    offers.forEach {
+                        Timber.tag("nt.dung").d("Offer: ${it.offering.identifier}")
                     }
-                ) {
-                    UiKitApp(containerColor = themeColors().background.Normal)
                 }
             }
+
+//            PaywallScreen {
+//
+//            }
         }
     }
 }

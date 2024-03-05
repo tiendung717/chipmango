@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
+import com.revenuecat.purchases.CustomerInfo
 import io.chipmango.revenuecat.extensions.hasActiveEntitlements
 import com.revenuecat.purchases.LogLevel
 import com.revenuecat.purchases.Offering
@@ -110,5 +111,12 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
     private fun read(key: String, defaultValue: Boolean): Flow<Boolean> {
         val prefKey = booleanPreferencesKey(key)
         return context.dataStore.data.map { it[prefKey] ?: defaultValue }
+    }
+
+    fun savePurchase(customerInfo: CustomerInfo) {
+        val isPremium = customerInfo.entitlements.hasActiveEntitlements()
+        coroutineScope.launch {
+            save(KEY_PREMIUM, isPremium)
+        }
     }
 }
