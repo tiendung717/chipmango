@@ -6,7 +6,7 @@ sealed class RcState {
     data object Loading : RcState()
     data class Error(val message: String) : RcState()
     data class Success(
-        val offers: List<RcOffer>
+        val offer: Offering?
     ) : RcState()
 }
 

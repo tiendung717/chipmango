@@ -8,6 +8,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.revenuecat.purchases.CustomerInfo
 import io.chipmango.revenuecat.extensions.hasActiveEntitlements
 import com.revenuecat.purchases.LogLevel
+import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
@@ -41,24 +42,16 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
         Purchases.configure(PurchasesConfiguration.Builder(context, sdkKey).build())
     }
 
-    fun fetchAvailableProducts(
+    fun fetchCurrentOffer(
         onError: (String) -> Unit,
-        onSuccess: (List<RcOffer>) -> Unit
+        onSuccess: (Offering?) -> Unit
     ) {
         Purchases.sharedInstance.getOfferingsWith(
             onError = { error ->
                 onError(error.message)
             },
             onSuccess = { offerings ->
-
-                val offers = offerings.all.map { entry ->
-                    RcOffer(
-                        entry.value,
-                        entry.value.getMetadataString("title", ""),
-                        entry.value.getMetadataString("subtitle", ""),
-                    )
-                }
-                onSuccess(offers)
+                onSuccess(offerings.current)
             }
         )
     }
