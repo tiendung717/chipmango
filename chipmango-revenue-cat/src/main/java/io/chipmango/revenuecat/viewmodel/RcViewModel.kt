@@ -21,14 +21,14 @@ class RcViewModel @Inject constructor(
 
     val rcState: MutableStateFlow<RcState> = MutableStateFlow(RcState.Loading)
 
-    fun fetchAvailableProducts() {
+    fun fetchCurrentOffer() {
         viewModelScope.launch {
-            revenueCat.fetchAvailableProducts(
+            revenueCat.fetchCurrentOffer(
                 onError = { message ->
                     rcState.update { RcState.Error(message) }
                 },
-                onSuccess = { offers ->
-                    rcState.update { RcState.Success(offers) }
+                onSuccess = { offer ->
+                    rcState.update { RcState.Success(offer) }
                 }
             )
         }

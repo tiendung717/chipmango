@@ -29,7 +29,7 @@ fun UpgradeScreen(
         }
 
         is RcState.Success -> {
-            val offers = remember { (paywallState as RcState.Success).offers }
+            val offers = remember { (paywallState as RcState.Success).offer }
 
             content(offers)
         }
