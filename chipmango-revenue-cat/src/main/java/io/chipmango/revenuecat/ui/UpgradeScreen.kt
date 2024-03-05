@@ -6,6 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.revenuecat.purchases.Offering
 import io.chipmango.revenuecat.RcOffer
 import io.chipmango.revenuecat.RcState
 import io.chipmango.revenuecat.viewmodel.RcViewModel
@@ -15,12 +16,12 @@ fun UpgradeScreen(
     rcViewModel: RcViewModel = hiltViewModel(),
     contentLoading: @Composable () -> Unit,
     contentError: @Composable (String) -> Unit,
-    content: @Composable (List<RcOffer>) -> Unit
+    content: @Composable (Offering?) -> Unit
 ) {
     val paywallState by rcViewModel.rcState.collectAsState()
 
     LaunchedEffect(Unit) {
-        rcViewModel.fetchAvailableProducts()
+        rcViewModel.fetchCurrentOffer()
     }
 
     when (paywallState) {
