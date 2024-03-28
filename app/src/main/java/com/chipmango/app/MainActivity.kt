@@ -14,6 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.compose.rememberNavController
+import com.chipmango.app.navigation.MainNavigation
 import com.chipmango.app.theme.themeColors
 import com.solid.test.BuildConfig
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,8 +41,6 @@ data object BlankAdUnit : AdUnit("")
 @AndroidEntryPoint
 class MainActivity : AdContainerActivity() {
 
-    private val ratingViewModel: RatingViewModel by viewModels<RatingViewModel>()
-
     override fun isAdEnabled(): Boolean {
         return true
     }
@@ -48,21 +48,7 @@ class MainActivity : AdContainerActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val darkMode by remember {
-                mutableStateOf(false)
-            }
-
-            UpgradeScreen(contentLoading = { /*TODO*/ }, contentError = {}) { offers ->
-                LaunchedEffect(Unit) {
-                    offers.forEach {
-                        Timber.tag("nt.dung").d("Offer: ${it.offering.identifier}")
-                    }
-                }
-            }
-
-//            PaywallScreen {
-//
-//            }
+            MainNavigation(navController = rememberNavController())
         }
     }
 }
