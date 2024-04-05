@@ -9,7 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
-import io.chipmango.theme.colors.LocalColorSet
+import io.chipmango.theme.colors.LocalColors
 import io.chipmango.theme.colors.MaterialDarkColors
 import io.chipmango.theme.colors.MaterialLightColors
 import io.chipmango.theme.colors.ThemeColor
@@ -29,7 +29,7 @@ fun AppTheme(
         }
     }
 
-    CompositionLocalProvider(LocalColorSet provides colors) {
+    CompositionLocalProvider(LocalColors provides colors) {
         MaterialTheme(
             colorScheme = if (useDarkTheme) MaterialDarkColors else MaterialLightColors,
             content = {
