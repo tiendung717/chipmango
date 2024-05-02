@@ -20,10 +20,10 @@ val patch = props["patchVersion"].toString().toInt()
 
 android {
     namespace = "io.chipmango"
-    compileSdk = 33
+    compileSdk = Build.compileSdk
 
     defaultConfig {
-        minSdk = 24
+        minSdk = Build.minSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")

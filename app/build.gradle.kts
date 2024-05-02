@@ -53,9 +53,6 @@ android {
 dependencies {
     implementation(project(":chipmango"))
     implementation(project(":chipmango-ad"))
-    implementation(project(":chipmango-permission"))
-    implementation(project(":chipmango-uikit"))
-    implementation(project(":chipmango-rating"))
     implementation(project(":chipmango-revenue-cat"))
     dependOn(
         deps.AndroidX,
