@@ -61,16 +61,6 @@ android {
     }
 }
 
-ext {
-    set("PUBLISH_GROUP_ID", "io.github.tiendung717")
-    set("PUBLISH_ARTIFACT_ID", "chipmango-rating")
-    set("PUBLISH_VERSION", "$major.$minor.$patch")
-}
-
-apply {
-    from("${rootDir}/scripts/publish-module.gradle")
-}
-
 dependencies {
     implementation("io.github.a914-gowtham:compose-ratingbar:1.1.0")
 
