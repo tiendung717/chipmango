@@ -60,16 +60,6 @@ android {
     }
 }
 
-ext {
-    set("PUBLISH_GROUP_ID", "io.github.tiendung717")
-    set("PUBLISH_ARTIFACT_ID", "chipmango-permission")
-    set("PUBLISH_VERSION", "$major.$minor.$patch")
-}
-
-apply {
-    from("${rootDir}/scripts/publish-module.gradle")
-}
-
 dependencies {
     dependOn(
         deps.AndroidX,
