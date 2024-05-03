@@ -1,4 +1,4 @@
-package io.chipmango.revenuecat
+package io.chipmango.revenuecat.domain
 
 import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.models.StoreProduct

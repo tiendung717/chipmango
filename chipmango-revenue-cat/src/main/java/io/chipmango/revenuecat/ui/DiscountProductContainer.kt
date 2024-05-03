@@ -7,11 +7,11 @@ import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.revenuecat.purchases.models.StoreProduct
-import io.chipmango.revenuecat.ProductsResult
+import io.chipmango.revenuecat.domain.ProductsResult
 import io.chipmango.revenuecat.viewmodel.PaywallViewModel
 
 @Composable
-fun ProductContainer(
+internal fun DiscountProductContainer(
     paywallViewModel: PaywallViewModel = hiltViewModel(),
     productIds: List<String>,
     contentLoading: @Composable () -> Unit,

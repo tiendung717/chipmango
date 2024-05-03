@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.revenuecat.purchases.CustomerInfo
 import io.chipmango.revenuecat.RevenueCat
-import io.chipmango.revenuecat.OfferingResult
+import io.chipmango.revenuecat.domain.OfferingResult
 import io.chipmango.revenuecat.PurchaseListener
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.models.StoreProduct
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.chipmango.revenuecat.ProductsResult
+import io.chipmango.revenuecat.domain.ProductsResult
 import io.chipmango.revenuecat.receiver.DiscountReceiver
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
