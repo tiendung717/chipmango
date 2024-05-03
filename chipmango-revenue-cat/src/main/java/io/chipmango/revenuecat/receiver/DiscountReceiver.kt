@@ -20,7 +20,7 @@ abstract class DiscountReceiver : BroadcastReceiver() {
 
         val notificationManager = NotificationManagerCompat.from(context)
         if (hasPostNotificationPermission(context)) {
-            notificationManager.notify(Random.nextInt(), createNotification(title, message))
+            notificationManager.notify(Random.nextInt(), createNotification(context, title, message))
         }
     }
 
@@ -32,6 +32,6 @@ abstract class DiscountReceiver : BroadcastReceiver() {
         }
     }
 
-    abstract fun createNotification(title: String?, content: String?): Notification
+    abstract fun createNotification(context: Context, title: String?, content: String?): Notification
 
 }
