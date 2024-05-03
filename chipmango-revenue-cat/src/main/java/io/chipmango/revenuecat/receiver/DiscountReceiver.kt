@@ -3,6 +3,8 @@ package io.chipmango.revenuecat.receiver
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -20,7 +22,9 @@ abstract class DiscountReceiver : BroadcastReceiver() {
 
         val notificationManager = NotificationManagerCompat.from(context)
         if (hasPostNotificationPermission(context)) {
-            notificationManager.notify(Random.nextInt(), createNotification(context, title, message))
+            val channelId = "discountOffer"
+            createNotificationChannelIfNotExists(context, channelId)
+            notificationManager.notify(Random.nextInt(), createNotification(context, channelId, title, message))
         }
     }
 
@@ -32,6 +36,21 @@ abstract class DiscountReceiver : BroadcastReceiver() {
         }
     }
 
-    abstract fun createNotification(context: Context, title: String?, content: String?): Notification
+    private fun createNotificationChannelIfNotExists(context: Context, channelId: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val notificationManager = NotificationManagerCompat.from(context)
+            if (notificationManager.getNotificationChannel(channelId) == null) {
+                val name = "Discount Offer Channel"
+                val descriptionText = "Channel for show discount offer"
+                val importance = NotificationManager.IMPORTANCE_HIGH
+                val channel = NotificationChannel(channelId, name, importance).apply {
+                    description = descriptionText
+                }
+                notificationManager.createNotificationChannel(channel)
+            }
+        }
+    }
+
+    abstract fun createNotification(context: Context, channelId: String, title: String?, content: String?): Notification
 
 }

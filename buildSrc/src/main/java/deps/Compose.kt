@@ -27,7 +27,7 @@ object Compose : Dependency() {
     private const val debugUi = "androidx.compose.ui:ui-tooling"
     private const val uiGraphics = "androidx.compose.ui:ui-graphics"
     private const val materialIcon = "androidx.compose.material:material-icons-extended"
-    private const val lifecyclerRuntime = "androidx.lifecycle:lifecycle-runtime-compose"
+    private const val lifecyclerRuntime = "androidx.lifecycle:lifecycle-runtime-compose:2.7.0"
 
     private const val navigation = "androidx.navigation:navigation-compose:${Versions.navigation}"
     private const val hiltNavigation = "androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigation}"

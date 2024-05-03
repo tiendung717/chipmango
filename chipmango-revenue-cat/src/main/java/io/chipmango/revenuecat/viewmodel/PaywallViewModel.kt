@@ -39,6 +39,14 @@ class PaywallViewModel @Inject constructor(
         revenueCat.setPaywallOnboardingShown()
     }
 
+    fun verifyInitialAppLaunch(onSubsequentLaunch: () -> Unit) {
+        viewModelScope.launch {
+            revenueCat.verifyInitialAppLaunch {
+                onSubsequentLaunch()
+            }
+        }
+    }
+
     fun fetchCurrentOffering() {
         viewModelScope.launch {
             _offeringResult.value = OfferingResult.Loading

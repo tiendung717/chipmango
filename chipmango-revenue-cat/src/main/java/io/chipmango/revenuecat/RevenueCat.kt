@@ -49,6 +49,7 @@ import kotlin.math.max
 class RevenueCat @Inject constructor(@ApplicationContext private val context: Context) {
 
     companion object {
+        private const val KEY_APP_FIRST_LAUNCH = "key_app_first_launch"
         private const val KEY_PREMIUM = "key_premium"
         private const val KEY_DISCOUNT_REMINDER = "key_discount_reminder"
         private const val KEY_DISCOUNT_EXPIRY = "key_discount_expiry"
@@ -64,6 +65,18 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
         }
         Purchases.configure(PurchasesConfiguration.Builder(context, sdkKey).build())
     }
+
+    suspend fun verifyInitialAppLaunch(onSubsequentLaunch: () -> Unit) {
+        val isAppLaunchedFirstTime = runBlocking {
+            read(KEY_APP_FIRST_LAUNCH, true).first()
+        }
+        if (!isAppLaunchedFirstTime) {
+            onSubsequentLaunch()
+        } else {
+            save(KEY_APP_FIRST_LAUNCH, false)
+        }
+    }
+
 
     fun setPaywallOnboardingShown() {
         isPaywallOnboardingShown = true
