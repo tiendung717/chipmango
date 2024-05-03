@@ -202,6 +202,7 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
     }
 
     fun evaluateDiscountOfferDisplay(
+        discountStartTime: ZonedDateTime,
         discountUniqueRequestId: Int,
         discountTitle: String,
         discountMessage: String,
@@ -219,13 +220,14 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
                     override fun onReceived(customerInfo: CustomerInfo) {
                         if (shouldTriggerDiscount(customerInfo)) {
                             setDiscountReminder(
+                                discountStartTime,
                                 discountUniqueRequestId,
                                 discountTitle,
                                 discountMessage,
                                 discountReceiverClass
                             )
                             onDiscountReminderSetupComplete()
-                            onDiscountExpirySet(discountDuration)
+                            onDiscountExpirySet(discountStartTime, discountDuration)
                         }
                     }
                 }
@@ -234,6 +236,7 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
     }
 
     private fun setDiscountReminder(
+        discountStartTime: ZonedDateTime,
         discountUniqueRequestId: Int,
         discountTitle: String,
         discountMessage: String,
@@ -251,14 +254,8 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
             discountIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        var startTime = ZonedDateTime.now()
-            .plusDays(1)
-            .with(LocalTime.of(20, 0))
-        if (BuildConfig.DEBUG) {
-            startTime = ZonedDateTime.now().plusSeconds(10)
-        }
 
-        val startTimeMillis = startTime.toInstant().toEpochMilli()
+        val startTimeMillis = discountStartTime.toInstant().toEpochMilli()
 
         val canScheduleExactAlarms = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             alarmManager.canScheduleExactAlarms()
@@ -332,9 +329,9 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
         }
     }
 
-    private fun onDiscountExpirySet(discountDuration: Duration) {
+    private fun onDiscountExpirySet(discountStartTime: ZonedDateTime, discountDuration: Duration) {
         coroutineScope.launch {
-            save(KEY_DISCOUNT_EXPIRY, System.currentTimeMillis() + discountDuration.toMillis())
+            save(KEY_DISCOUNT_EXPIRY, discountStartTime.toInstant().toEpochMilli() + discountDuration.toMillis())
         }
     }
 }
