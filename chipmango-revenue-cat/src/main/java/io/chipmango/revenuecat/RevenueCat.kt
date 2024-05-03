@@ -209,7 +209,7 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
         discountReceiverClass: Class<out DiscountReceiver>,
         shouldTriggerDiscount: (CustomerInfo) -> Boolean = { hasUserCancelledTrial(it) }
     ) {
-        if (isDiscountReminderSet()) {
+        if (!isDiscountReminderSet()) {
             Purchases.sharedInstance.getCustomerInfo(
                 object : ReceiveCustomerInfoCallback {
                     override fun onError(error: PurchasesError) {
