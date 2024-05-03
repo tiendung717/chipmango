@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="payment_policy" translatable="false">"After the free trial period ends or the purchase is confirmed, payment will be charged to your Google Play account. Subscription will automatically renew unless aut-renew is turned off at least 24 hours before the end of the current period. You can manage or unsubscribe at any time in Google Play account settings."</string>
+    <string name="buy_now">Buy now</string>
+    <string name="subscribe_now">Subscribe now</string>
+    <string name="one_time_payment">One-time payment</string>
+    <string name="cancel_anytime_auto_renew">Cancel anytime, Auto renew</string>
+
+</resources>
