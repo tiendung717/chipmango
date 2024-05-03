@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.time.Duration
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -119,14 +120,18 @@ class PaywallViewModel @Inject constructor(
     fun isDiscountExpired() = revenueCat.isDiscountExpired()
 
     fun evaluateDiscountOfferDisplay(
+        discountStartTime: ZonedDateTime,
         discountUniqueRequestId: Int,
         discountTitle: String,
         discountMessage: String,
         discountDuration: Duration,
         discountReceiverClass: Class<out DiscountReceiver>,
-        shouldTriggerDiscount: (CustomerInfo) -> Boolean = { revenueCat.hasUserCancelledTrial(it) }
+        shouldTriggerDiscount: (CustomerInfo) -> Boolean = {
+            revenueCat.hasUserCancelledTrial(it) || revenueCat.hasUsedAppForDuration(it, Duration.ofDays(3))
+        }
     ) {
         revenueCat.evaluateDiscountOfferDisplay(
+            discountStartTime,
             discountUniqueRequestId,
             discountTitle,
             discountMessage,
@@ -135,6 +140,15 @@ class PaywallViewModel @Inject constructor(
             shouldTriggerDiscount
         )
     }
+
+    fun userCancelledTrial(customerInfo: CustomerInfo): Boolean {
+        return revenueCat.hasUserCancelledTrial(customerInfo)
+    }
+
+    fun hasUsedAppForDuration(customerInfo: CustomerInfo, duration: Duration): Boolean {
+        return revenueCat.hasUsedAppForDuration(customerInfo, duration)
+    }
+
     fun getPremiumStatusFlow(): Flow<Boolean> {
         return revenueCat.getPremiumStatusFlow()
     }

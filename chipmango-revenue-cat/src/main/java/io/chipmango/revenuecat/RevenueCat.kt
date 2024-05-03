@@ -37,7 +37,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.time.Duration
+import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -199,6 +201,14 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
         }
 
         return hasCancelledTrial && !hasActiveEntitlement
+    }
+
+    fun hasUsedAppForDuration(customerInfo: CustomerInfo, duration: Duration): Boolean {
+        val hasActiveEntitlement = customerInfo.entitlements.hasActiveEntitlements()
+        val firstSeen = customerInfo.firstSeen.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+        val now = LocalDateTime.now()
+        val appUsageDuration = Duration.between(firstSeen, now)
+        return appUsageDuration >= duration && !hasActiveEntitlement
     }
 
     fun evaluateDiscountOfferDisplay(
