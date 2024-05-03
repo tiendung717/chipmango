@@ -13,9 +13,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import io.chipmango.revenuecat.R
 
 @Composable
 fun ThanksDialog(
@@ -23,7 +26,10 @@ fun ThanksDialog(
     properties: DialogProperties = DialogProperties(),
     onContinueClick: () -> Unit
 ) {
-    Dialog(onDismissRequest = onDismissRequest, properties = properties) {
+    Dialog(
+        onDismissRequest = onDismissRequest,
+        properties = properties
+    ) {
         Surface(
             shape = RoundedCornerShape(12.dp),
             color = MaterialTheme.colorScheme.surface
@@ -33,7 +39,7 @@ fun ThanksDialog(
                     modifier = Modifier
                         .align(Alignment.Start)
                         .padding(horizontal = 24.dp, vertical = 16.dp),
-                    text = "Purchase completed!",
+                    text = stringResource(R.string.purchase_completed),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -42,7 +48,7 @@ fun ThanksDialog(
                     modifier = Modifier
                         .align(Alignment.Start)
                         .padding(horizontal = 24.dp, vertical = 16.dp),
-                    text = "Thanks so much for your recent purchase. We appreciate you and hope you enjoy the app.",
+                    text = stringResource(R.string.purchase_completed_message),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -59,7 +65,7 @@ fun ThanksDialog(
                     ) {
                         Text(
                             modifier = Modifier,
-                            text = "Continue",
+                            text = stringResource(R.string.btn_continue),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.tertiary
                         )
@@ -68,4 +74,13 @@ fun ThanksDialog(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun ThanksDialogPreview() {
+    ThanksDialog(
+        onDismissRequest = { },
+        onContinueClick = { }
+    )
 }

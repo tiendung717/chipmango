@@ -5,5 +5,8 @@
     <string name="subscribe_now">Subscribe now</string>
     <string name="one_time_payment">One-time payment</string>
     <string name="cancel_anytime_auto_renew">Cancel anytime, Auto renew</string>
+    <string name="purchase_completed">Purchase completed!</string>
+    <string name="purchase_completed_message">Thanks so much for your recent purchase. We appreciate you and hope you enjoy the app.</string>
+    <string name="btn_continue">Continue</string>
 
 </resources>
