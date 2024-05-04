@@ -2,9 +2,11 @@ package io.chipmango.revenuecat.viewmodel
 
 import android.app.Activity
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.revenuecat.purchases.CustomerInfo
+import com.revenuecat.purchases.Offering
 import io.chipmango.revenuecat.RevenueCat
 import io.chipmango.revenuecat.domain.OfferingResult
 import io.chipmango.revenuecat.PurchaseListener
@@ -25,18 +27,24 @@ class PaywallViewModel @Inject constructor(
     private val revenueCat: RevenueCat
 ) : ViewModel() {
 
-    private val _offeringResult: MutableStateFlow<OfferingResult> = MutableStateFlow(OfferingResult.Loading)
-    val offeringResult: Flow<OfferingResult> = _offeringResult
-
-    private val _productResult = MutableStateFlow<ProductsResult>(ProductsResult.Loading)
-    val productResult: Flow<ProductsResult> = _productResult
-
     fun isPaywallOnboardingShown(): Boolean {
         return revenueCat.isPaywallOnboardingShown()
     }
 
     fun setPaywallOnboardingShown() {
         revenueCat.setPaywallOnboardingShown()
+    }
+
+    fun getCachedOffering() = revenueCat.getCachedOffering()
+
+    fun getCachedProducts() = revenueCat.getCachedProducts()
+
+    fun setCachedOffering(offering: Offering) {
+        revenueCat.setCachedOffering(offering)
+    }
+
+    fun setCachedProducts(products: List<StoreProduct>) {
+        revenueCat.setCachedProducts(products)
     }
 
     fun verifyInitialAppLaunch(onSubsequentLaunch: () -> Unit) {
@@ -47,37 +55,58 @@ class PaywallViewModel @Inject constructor(
         }
     }
 
-    fun fetchCurrentOffering() {
-        viewModelScope.launch {
-            _offeringResult.value = OfferingResult.Loading
-            revenueCat.fetchCurrentOffer(
-                onError = { message ->
-                    _offeringResult.value = OfferingResult.Error(message)
-                },
-                onSuccess = { offer ->
-                    if (offer != null) {
-                        _offeringResult.value = OfferingResult.Success(offer)
-                    } else {
-                        _offeringResult.value = OfferingResult.Error("No offering available")
-                    }
+    fun loadCurrentOffering(
+        onSuccess: (Offering) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        revenueCat.fetchCurrentOffer(
+            onError = onError,
+            onSuccess = { offer ->
+                if (offer != null) {
+                    onSuccess(offer)
+                } else {
+                    onError("No offering available")
                 }
-            )
-        }
+            }
+        )
     }
 
-    fun fetchProducts(productIds: List<String>) {
+    fun loadProducts(
+        productIds: List<String>,
+        onSuccess: (List<StoreProduct>) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        revenueCat.fetchProducts(
+            productIds = productIds,
+            onError = onError,
+            onGetStoreProducts = { products ->
+                if (products.isNotEmpty()) {
+                    onSuccess(products)
+                } else {
+                    onError("No products available")
+                }
+            }
+        )
+    }
+
+    fun loadOfferingAndDiscount(
+        discountProductIds: List<String>,
+        onError: (String) -> Unit,
+        onSuccess: (Offering, List<StoreProduct>) -> Unit
+    ) {
         viewModelScope.launch {
-            revenueCat.fetchProducts(
-                productIds = productIds,
-                onError = { message ->
-                    _productResult.value = ProductsResult.Error(message)
-                },
-                onGetStoreProducts = { products ->
-                    if (products.isNotEmpty()) {
-                        _productResult.value = ProductsResult.Success(products)
-                    } else {
-                        _productResult.value = ProductsResult.Error("No products available")
-                    }
+            loadCurrentOffering(
+                onError = onError,
+                onSuccess = { offering ->
+                    revenueCat.setCachedOffering(offering)
+                    loadProducts(
+                        productIds = discountProductIds,
+                        onError = onError,
+                        onSuccess = { products ->
+                            revenueCat.setCachedProducts(products)
+                            onSuccess(offering, products)
+                        }
+                    )
                 }
             )
         }
