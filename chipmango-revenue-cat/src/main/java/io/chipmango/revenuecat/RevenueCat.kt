@@ -58,6 +58,8 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
     private val Context.dataStore by preferencesDataStore(name = "purchase.ds")
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var isPaywallOnboardingShown = false
+    private var cachedOffering: Offering? = null
+    private var cachedProducts: List<StoreProduct> = emptyList()
 
     fun init(context: Context, sdkKey: String, logEnabled: Boolean) {
         if (logEnabled) {
@@ -75,6 +77,22 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
         } else {
             save(KEY_APP_FIRST_LAUNCH, false)
         }
+    }
+
+    fun setCachedOffering(offering: Offering) {
+        cachedOffering = offering
+    }
+
+    fun getCachedOffering(): Offering? {
+        return cachedOffering
+    }
+
+    fun setCachedProducts(products: List<StoreProduct>) {
+        cachedProducts = products
+    }
+
+    fun getCachedProducts(): List<StoreProduct> {
+        return cachedProducts
     }
 
 

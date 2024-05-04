@@ -1,9 +1,12 @@
 package io.chipmango.revenuecat.ui
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleStartEffect
 import com.revenuecat.purchases.CustomerInfo
+import com.revenuecat.purchases.Offering
+import com.revenuecat.purchases.models.StoreProduct
 import io.chipmango.revenuecat.receiver.DiscountReceiver
 import io.chipmango.revenuecat.viewmodel.PaywallViewModel
 import kotlinx.coroutines.flow.firstOrNull
@@ -14,6 +17,7 @@ import java.time.ZonedDateTime
 @Composable
 fun PaywallOnboard(
     paywallViewModel: PaywallViewModel = hiltViewModel<PaywallViewModel>(),
+    discountProductIds: List<String>,
     discountStartTime: ZonedDateTime,
     discountUniqueRequestId: Int,
     discountTitle: String,
@@ -43,10 +47,19 @@ fun PaywallOnboard(
             val isPremium = runBlocking {
                 paywallViewModel.getPremiumStatusFlow().firstOrNull() ?: false
             }
-            if (!paywallViewModel.isPaywallOnboardingShown() && !isPremium) {
-                paywallViewModel.setPaywallOnboardingShown()
-                onLaunchPaywall()
-            }
+
+            paywallViewModel.loadOfferingAndDiscount(
+                discountProductIds = discountProductIds,
+                onError = { message ->
+                    Log.e("PaywallOnboard", message)
+                },
+                onSuccess = { offering, products ->
+                    if (!paywallViewModel.isPaywallOnboardingShown() && !isPremium) {
+                        paywallViewModel.setPaywallOnboardingShown()
+                        onLaunchPaywall()
+                    }
+                }
+            )
         }
 
         onStopOrDispose { }

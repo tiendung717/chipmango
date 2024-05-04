@@ -3,6 +3,7 @@ package io.chipmango.revenuecat.ui
 import android.app.Activity
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,16 +31,12 @@ fun ScreenPurchase(
     texts: PaywallTexts = PaywallDefaultStyle.texts(),
     textStyles: PaywallTextStyles = PaywallDefaultStyle.textStyles(),
     shapes: PaywallShapes = PaywallDefaultStyle.shapes(),
-    contentLoading: @Composable () -> Unit,
-    contentError: @Composable (String) -> Unit,
-    showcaseContent: @Composable () -> Unit
+    showcaseContent: @Composable () -> Unit,
+    onSystemError: (String) -> Unit
 ) {
     val activity = LocalContext.current as Activity
     val paywallViewModel = hiltViewModel<PaywallViewModel>()
-    var showThanksDialog by remember {
-        mutableStateOf(false)
-    }
-
+    var showThanksDialog by remember { mutableStateOf(false) }
     val purchaseListener = remember {
         object : PurchaseListener {
             override fun onPurchaseCompleted(customerInfo: CustomerInfo) {
@@ -59,17 +56,17 @@ fun ScreenPurchase(
         }
     }
 
+    var offer: Offering? by remember { mutableStateOf(paywallViewModel.getCachedOffering()) }
+    var products: List<StoreProduct> by remember { mutableStateOf(paywallViewModel.getCachedProducts()) }
+
     if (paywallViewModel.isDiscountExpired()) {
-        OfferContainer(
-            contentLoading = contentLoading,
-            contentError = contentError
-        ) { offer: Offering ->
+        if (offer != null) {
             PaywallPlans(
                 colors = colors,
                 texts = texts,
                 textStyles = textStyles,
                 shapes = shapes,
-                products = offer.availablePackages,
+                products = offer?.availablePackages.orEmpty(),
                 purchaseListener = purchaseListener,
                 showcaseContent = showcaseContent,
                 optionMapper = { packages ->
@@ -112,13 +109,19 @@ fun ScreenPurchase(
                     it.keys.find { plan -> plan is UpgradePlan.Monthly }
                 }
             )
+        } else {
+            LaunchedEffect(Unit) {
+                paywallViewModel.loadCurrentOffering(
+                    onError = onSystemError,
+                    onSuccess = { offering ->
+                        offer = offering
+                        paywallViewModel.setCachedOffering(offering)
+                    }
+                )
+            }
         }
     } else {
-        DiscountProductContainer(
-            productIds = discountProductIds,
-            contentLoading = contentLoading,
-            contentError = contentError
-        ) { products: List<StoreProduct> ->
+        if (products.isNotEmpty()) {
             PaywallPlans(
                 colors = colors,
                 texts = texts,
@@ -184,6 +187,17 @@ fun ScreenPurchase(
                     it.keys.find { plan -> plan is UpgradePlan.LifetimeDiscount }
                 }
             )
+        } else {
+            LaunchedEffect(Unit) {
+                paywallViewModel.loadProducts(
+                    productIds = discountProductIds,
+                    onError = onSystemError,
+                    onSuccess = { discountProducts ->
+                        products = discountProducts
+                        paywallViewModel.setCachedProducts(discountProducts)
+                    }
+                )
+            }
         }
     }
 
