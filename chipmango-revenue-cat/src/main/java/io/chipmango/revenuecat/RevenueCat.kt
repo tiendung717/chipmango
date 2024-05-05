@@ -68,7 +68,7 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
         Purchases.configure(PurchasesConfiguration.Builder(context, sdkKey).build())
     }
 
-    suspend fun verifyInitialAppLaunch(onSubsequentLaunch: () -> Unit) {
+    suspend fun verifyInitialAppLaunch(onFirstLaunch: () -> Unit, onSubsequentLaunch: () -> Unit) {
         val isAppLaunchedFirstTime = runBlocking {
             read(KEY_APP_FIRST_LAUNCH, true).first()
         }
@@ -76,6 +76,7 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
             onSubsequentLaunch()
         } else {
             save(KEY_APP_FIRST_LAUNCH, false)
+            onFirstLaunch()
         }
     }
 

@@ -47,11 +47,12 @@ class PaywallViewModel @Inject constructor(
         revenueCat.setCachedProducts(products)
     }
 
-    fun verifyInitialAppLaunch(onSubsequentLaunch: () -> Unit) {
+    fun verifyInitialAppLaunch(onFirstLaunch: () -> Unit, onSubsequentLaunch: () -> Unit) {
         viewModelScope.launch {
-            revenueCat.verifyInitialAppLaunch {
-                onSubsequentLaunch()
-            }
+            revenueCat.verifyInitialAppLaunch(
+                onFirstLaunch = onFirstLaunch,
+                onSubsequentLaunch = onSubsequentLaunch
+            )
         }
     }
 

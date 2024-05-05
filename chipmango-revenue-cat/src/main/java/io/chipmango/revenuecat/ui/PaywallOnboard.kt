@@ -31,36 +31,49 @@ fun PaywallOnboard(
 ) {
     LifecycleStartEffect(Unit) {
         // Check if it's the first launch
-        paywallViewModel.verifyInitialAppLaunch {
-            // Check to show discount offer
-            paywallViewModel.evaluateDiscountOfferDisplay(
-                discountStartTime = discountStartTime,
-                discountDuration = discountDuration,
-                discountMessage = discountMessage,
-                discountTitle = discountTitle,
-                discountUniqueRequestId = discountUniqueRequestId,
-                discountReceiverClass = discountReceiverClass,
-                shouldTriggerDiscount = shouldTriggerDiscount
-            )
+        paywallViewModel.verifyInitialAppLaunch(
+            onFirstLaunch = {
+                paywallViewModel.loadOfferingAndDiscount(
+                    discountProductIds = discountProductIds,
+                    onError = { message ->
+                        Log.e("PaywallOnboard", message)
+                    },
+                    onSuccess = { offering, products ->
 
-            // Check to show paywall
-            val isPremium = runBlocking {
-                paywallViewModel.getPremiumStatusFlow().firstOrNull() ?: false
-            }
-
-            paywallViewModel.loadOfferingAndDiscount(
-                discountProductIds = discountProductIds,
-                onError = { message ->
-                    Log.e("PaywallOnboard", message)
-                },
-                onSuccess = { offering, products ->
-                    if (!paywallViewModel.isPaywallOnboardingShown() && !isPremium) {
-                        paywallViewModel.setPaywallOnboardingShown()
-                        onLaunchPaywall()
                     }
+                )
+            },
+            onSubsequentLaunch = {
+                // Check to show discount offer
+                paywallViewModel.evaluateDiscountOfferDisplay(
+                    discountStartTime = discountStartTime,
+                    discountDuration = discountDuration,
+                    discountMessage = discountMessage,
+                    discountTitle = discountTitle,
+                    discountUniqueRequestId = discountUniqueRequestId,
+                    discountReceiverClass = discountReceiverClass,
+                    shouldTriggerDiscount = shouldTriggerDiscount
+                )
+
+                // Check to show paywall
+                val isPremium = runBlocking {
+                    paywallViewModel.getPremiumStatusFlow().firstOrNull() ?: false
                 }
-            )
-        }
+
+                paywallViewModel.loadOfferingAndDiscount(
+                    discountProductIds = discountProductIds,
+                    onError = { message ->
+                        Log.e("PaywallOnboard", message)
+                    },
+                    onSuccess = { offering, products ->
+                        if (!paywallViewModel.isPaywallOnboardingShown() && !isPremium) {
+                            paywallViewModel.setPaywallOnboardingShown()
+                            onLaunchPaywall()
+                        }
+                    }
+                )
+            }
+        )
 
         onStopOrDispose { }
     }
