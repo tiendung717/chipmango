@@ -22,7 +22,6 @@ class InterstitialAdViewModel @Inject constructor() : ViewModel() {
 
     fun loadInterstitialAd(context: Context, adUnitId: String, onAdClosed: () -> Unit, onAdLoadFailed: () -> Unit) {
         viewModelScope.launch {
-            val interstitialAd = mutableStateOf<InterstitialAd?>(null)
             val fullContentCallback = object : FullScreenContentCallback() {
                 override fun onAdClicked() {
                     super.onAdClicked()
