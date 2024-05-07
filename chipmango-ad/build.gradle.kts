@@ -14,9 +14,9 @@ plugins {
 val versions = rootProject.file("version.properties")
 val props = Properties()
 props.load(FileInputStream(versions))
-val major = props["majorVersion"].toString().toInt()
-val minor = props["minorVersion"].toString().toInt()
-val patch = props["patchVersion"].toString().toInt()
+val major = props["adMajorVersion"].toString().toInt()
+val minor = props["adMinorVersion"].toString().toInt()
+val patch = props["adPatchVersion"].toString().toInt()
 
 android {
     namespace = "io.chipmango.ad"

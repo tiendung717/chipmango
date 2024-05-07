@@ -17,14 +17,17 @@ jobs:
 
         # Builds the release artifacts of the library
       - name: Chipmango - Release build
+        if: contains(github.event.head_commit.message, 'chipmango-core')
         run: ./gradlew :chipmango:assembleRelease
 
         # Builds the release artifacts of the library
       - name: Chipmango-Ad - Release build
+        if: contains(github.event.head_commit.message, 'chipmango-ad')
         run: ./gradlew :chipmango-ad:assembleRelease
 
         # Builds the release artifacts of the library
       - name: Chipmango-Revenue-Cat - Release build
+        if: contains(github.event.head_commit.message, 'chipmango-revenuecat')
         run: ./gradlew :chipmango-revenue-cat:assembleRelease
 
         # Generates other artifacts (javadocJar is optional)
