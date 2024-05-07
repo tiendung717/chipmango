@@ -10,8 +10,8 @@ import androidx.compose.ui.graphics.Shape
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.ads.nativead.NativeAd
-import io.chipmango.ad.banner.JcAdBanner
-import io.chipmango.ad.native.JcAdNative
+import io.chipmango.ad.banner.AdBanner
+import io.chipmango.ad.native.AdNative
 import io.chipmango.ad.native.TemplateNativeBanner
 import io.chipmango.ad.repo.ChipmangoAdViewModel
 
@@ -21,12 +21,12 @@ fun ChipmangoBannerAd(
     adViewModel: ChipmangoAdViewModel = hiltViewModel(),
     isTestAd: Boolean,
     isPremium: Boolean,
-    adUnit: AdUnit
+    adUnitId: String
 ) {
     val adInitialized by remember { adViewModel.isAdInitialized() }.collectAsStateWithLifecycle(initialValue = false)
 
     if (!isPremium && adInitialized) {
-        JcAdBanner(modifier = modifier, adUnit = adUnit, isTestAd = isTestAd)
+        AdBanner(modifier = modifier, adUnitId = adUnitId, isTestAd = isTestAd)
     }
 }
 
@@ -37,7 +37,7 @@ fun ChipmangoNativeAd(
     isTestAd: Boolean,
     isPremium: Boolean,
     darkMode: Boolean,
-    adUnit: AdUnit,
+    adUnitId: String,
     containerColor: Color = Color.Transparent,
     borderColor: Color = Color.Transparent,
     shape: Shape = RectangleShape,
@@ -48,9 +48,9 @@ fun ChipmangoNativeAd(
     val adInitialized by remember { adViewModel.isAdInitialized() }.collectAsStateWithLifecycle(initialValue = false)
 
     if (!isPremium && adInitialized) {
-        JcAdNative(
+        AdNative(
             modifier = modifier,
-            adUnit = adUnit,
+            adUnit = adUnitId,
             adLayout = adLayout,
             isDarkMode = darkMode,
             isTestAd = isTestAd,

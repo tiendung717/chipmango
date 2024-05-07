@@ -22,7 +22,6 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import io.chipmango.ad.request.AdRequestFactory
-import io.chipmango.ad.AdUnit
 import timber.log.Timber
 import io.chipmango.ad.R
 import io.chipmango.ad.TestBanner
@@ -30,14 +29,14 @@ import io.chipmango.ad.TestBanner
 
 @SuppressLint("VisibleForTests")
 @Composable
-internal fun JcAdBanner(
+internal fun AdBanner(
     modifier: Modifier,
     isTestAd: Boolean,
-    adUnit: AdUnit,
+    adUnitId: String,
     onAdFailedToLoad: (LoadAdError) -> Unit = {}
 ) {
     val bannerAd = remember {
-        if (isTestAd) TestBanner else adUnit
+        if (isTestAd) TestBanner.unitId else adUnitId
     }
     var adView: AdView? = remember { null }
     var adLoaded by remember { mutableStateOf(false) }
@@ -67,7 +66,7 @@ internal fun JcAdBanner(
                 adView = AdView(it)
                     .apply {
                         this.setAdSize(adSize)
-                        this.adUnitId = bannerAd.unitId
+                        this.adUnitId = adUnitId
                         this.adListener = adListener
                         this.loadAd(AdRequestFactory.create())
                     }

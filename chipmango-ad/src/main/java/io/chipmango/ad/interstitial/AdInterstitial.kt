@@ -3,11 +3,8 @@ package io.chipmango.ad.interstitial
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
@@ -16,7 +13,6 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import io.chipmango.ad.request.AdRequestFactory
 import io.chipmango.ad.AdUnit
 import io.chipmango.ad.TestInterstitial
-import timber.log.Timber
 
 @Composable
 fun rememberInterstitialAd(

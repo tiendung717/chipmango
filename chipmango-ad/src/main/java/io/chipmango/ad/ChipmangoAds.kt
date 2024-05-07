@@ -23,14 +23,12 @@ import javax.inject.Singleton
 
 @Singleton
 class ChipmangoAds @Inject constructor(
-    private val adRepo: ChipmangoAdRepo,
-    @AdTestDeviceList private val testDevices: List<String>
+    private val adRepo: ChipmangoAdRepo
 ) {
 
     private lateinit var consentInformation: ConsentInformation
     private var consentForm: ConsentForm? = null
     private var isMobileAdsInitializeCalled = AtomicBoolean(false)
-
 
     fun init(activity: Activity) {
         val debugSettings = ConsentDebugSettings.Builder(activity)
@@ -39,9 +37,6 @@ class ChipmangoAds @Inject constructor(
                     .DebugGeography
                     .DEBUG_GEOGRAPHY_EEA
             )
-            .apply {
-                testDevices.forEach { addTestDeviceHashedId(it) }
-            }
             .build()
 
         val params = ConsentRequestParameters.Builder()
@@ -64,7 +59,7 @@ class ChipmangoAds @Inject constructor(
 
                 // Consent has been gathered.
                 if (consentInformation.canRequestAds()) {
-                    initializeMobileAdsSdk(activity, testDevices);
+                    initializeMobileAdsSdk(activity);
                 }
             },
             { error ->
@@ -76,7 +71,7 @@ class ChipmangoAds @Inject constructor(
         // while checking for new consent information. Consent obtained in
         // the previous session can be used to request ads.
         if (consentInformation.canRequestAds()) {
-            initializeMobileAdsSdk(activity, testDevices)
+            initializeMobileAdsSdk(activity)
         }
 
     }
@@ -89,7 +84,7 @@ class ChipmangoAds @Inject constructor(
                 if (consentInformation.consentStatus == ConsentInformation.ConsentStatus.REQUIRED) {
                     consentForm.show(activity) {
                         if (it == null) {
-                            initializeMobileAdsSdk(activity, testDevices)
+                            initializeMobileAdsSdk(activity)
                         }
                     }
                 }
@@ -100,15 +95,13 @@ class ChipmangoAds @Inject constructor(
         )
     }
 
-    private fun initializeMobileAdsSdk(context: Context, testDevices: List<String>) {
+    private fun initializeMobileAdsSdk(context: Context) {
         if (isMobileAdsInitializeCalled.get()) {
             return
         }
 
         MobileAds.initialize(context) {
-            val configuration = RequestConfiguration.Builder()
-                .setTestDeviceIds(testDevices)
-                .build()
+            val configuration = RequestConfiguration.Builder().build()
             MobileAds.setRequestConfiguration(configuration)
             isMobileAdsInitializeCalled.set(true)
             adRepo.setAdInitialized(

@@ -5,14 +5,14 @@ import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
 import com.chipmango.app.navigation.MainNavigation
 import dagger.hilt.android.AndroidEntryPoint
-import io.chipmango.ad.AdContainerActivity
+import io.chipmango.ad.AdDisplayActivity
 import io.chipmango.ad.AdUnit
 import io.chipmango.theme.theme.AppTheme
 
 data object BlankAdUnit : AdUnit("")
 
 @AndroidEntryPoint
-class MainActivity : AdContainerActivity() {
+class MainActivity : AdDisplayActivity() {
 
     override fun isAdEnabled(): Boolean {
         return true

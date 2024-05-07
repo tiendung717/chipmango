@@ -16,7 +16,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -27,24 +26,21 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdOptions.ADCHOICES_TOP_RIGHT
-import com.google.android.gms.ads.nativead.NativeAdOptions.AdChoicesPlacement
 import io.chipmango.ad.request.AdRequestFactory
-import io.chipmango.ad.AdUnit
 import io.chipmango.ad.R
-import io.chipmango.ad.TestBanner
 import io.chipmango.ad.TestNative
 import timber.log.Timber
 
 
 @Composable
-internal fun JcAdNative(
+internal fun AdNative(
     modifier: Modifier = Modifier,
     isTestAd: Boolean,
     isDarkMode: Boolean,
     containerColor: Color,
     shape: Shape,
     borderColor: Color,
-    adUnit: AdUnit = TestNative,
+    adUnit: String,
     adLayout: @Composable (Boolean, NativeAd) -> Unit = { darkMode, ad ->
         TemplateNativeBanner(darkMode, ad)
     }
@@ -53,11 +49,11 @@ internal fun JcAdNative(
     var nativeAd by remember { mutableStateOf<NativeAd?>(null) }
     var adLoaded by remember { mutableStateOf(false) }
     val ad = remember {
-        if (isTestAd) TestNative else adUnit
+        if (isTestAd) TestNative.unitId else adUnit
     }
     val nativeAdLoader = rememberNativeAdListener(
         context = context,
-        ad = ad,
+        adUnitId = ad,
         onAdLoadFailed = {
             Timber.tag("nt.dung").e(it.message)
         },
@@ -117,12 +113,12 @@ internal fun TemplateNativeBanner(darkMode: Boolean, ad: NativeAd) {
 @Composable
 private fun rememberNativeAdListener(
     context: Context,
-    ad: AdUnit,
+    adUnitId: String,
     onAdLoadFailed: (LoadAdError) -> Unit,
     onAdLoaded: () -> Unit,
     onNativeAdLoaded: (NativeAd) -> Unit
 ) = remember {
-    AdLoader.Builder(context, ad.unitId)
+    AdLoader.Builder(context, adUnitId)
         .forNativeAd { ad: NativeAd ->
             onNativeAdLoaded(ad)
         }
