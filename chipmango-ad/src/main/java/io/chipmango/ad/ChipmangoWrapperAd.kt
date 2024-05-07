@@ -19,14 +19,12 @@ import io.chipmango.ad.repo.ChipmangoAdViewModel
 fun ChipmangoBannerAd(
     modifier: Modifier = Modifier,
     adViewModel: ChipmangoAdViewModel = hiltViewModel(),
-    isTestAd: Boolean,
-    isPremium: Boolean,
     adUnitId: String
 ) {
     val adInitialized by remember { adViewModel.isAdInitialized() }.collectAsStateWithLifecycle(initialValue = false)
 
-    if (!isPremium && adInitialized) {
-        AdBanner(modifier = modifier, adUnitId = adUnitId, isTestAd = isTestAd)
+    if (adInitialized) {
+        AdBanner(modifier = modifier, adUnitId = adUnitId)
     }
 }
 
@@ -34,8 +32,6 @@ fun ChipmangoBannerAd(
 fun ChipmangoNativeAd(
     modifier: Modifier = Modifier,
     adViewModel: ChipmangoAdViewModel = hiltViewModel(),
-    isTestAd: Boolean,
-    isPremium: Boolean,
     darkMode: Boolean,
     adUnitId: String,
     containerColor: Color = Color.Transparent,
@@ -47,13 +43,12 @@ fun ChipmangoNativeAd(
 ) {
     val adInitialized by remember { adViewModel.isAdInitialized() }.collectAsStateWithLifecycle(initialValue = false)
 
-    if (!isPremium && adInitialized) {
+    if (adInitialized) {
         AdNative(
             modifier = modifier,
             adUnit = adUnitId,
             adLayout = adLayout,
             isDarkMode = darkMode,
-            isTestAd = isTestAd,
             containerColor = containerColor,
             shape = shape,
             borderColor = borderColor

@@ -25,6 +25,7 @@ import io.chipmango.revenuecat.viewmodel.PaywallViewModel
 
 @Composable
 fun ScreenPurchase(
+    activity: Activity,
     discountProductIds: List<String>,
     skuType: (StoreProduct) -> SkuType,
     colors: PaywallColors = PaywallDefaultStyle.colors(),
@@ -34,7 +35,6 @@ fun ScreenPurchase(
     showcaseContent: @Composable () -> Unit,
     onSystemError: (String) -> Unit
 ) {
-    val activity = LocalContext.current as Activity
     val paywallViewModel = hiltViewModel<PaywallViewModel>()
     var showThanksDialog by remember { mutableStateOf(false) }
     val purchaseListener = remember {
@@ -62,6 +62,7 @@ fun ScreenPurchase(
     if (paywallViewModel.isDiscountExpired()) {
         if (offer != null) {
             PaywallPlans(
+                activity = activity,
                 colors = colors,
                 texts = texts,
                 textStyles = textStyles,
@@ -123,6 +124,7 @@ fun ScreenPurchase(
     } else {
         if (products.isNotEmpty()) {
             PaywallPlans(
+                activity = activity,
                 colors = colors,
                 texts = texts,
                 textStyles = textStyles,

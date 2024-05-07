@@ -35,7 +35,6 @@ import timber.log.Timber
 @Composable
 internal fun AdNative(
     modifier: Modifier = Modifier,
-    isTestAd: Boolean,
     isDarkMode: Boolean,
     containerColor: Color,
     shape: Shape,
@@ -48,12 +47,9 @@ internal fun AdNative(
     val context = LocalContext.current
     var nativeAd by remember { mutableStateOf<NativeAd?>(null) }
     var adLoaded by remember { mutableStateOf(false) }
-    val ad = remember {
-        if (isTestAd) TestNative.unitId else adUnit
-    }
     val nativeAdLoader = rememberNativeAdListener(
         context = context,
-        adUnitId = ad,
+        adUnitId = adUnit,
         onAdLoadFailed = {
             Timber.tag("nt.dung").e(it.message)
         },
@@ -65,7 +61,7 @@ internal fun AdNative(
         }
     )
 
-    DisposableEffect(ad) {
+    DisposableEffect(Unit) {
         nativeAdLoader.loadAd(AdRequestFactory.create())
         onDispose {
             nativeAd?.destroy()

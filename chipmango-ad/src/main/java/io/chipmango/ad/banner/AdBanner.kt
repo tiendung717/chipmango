@@ -31,13 +31,9 @@ import io.chipmango.ad.TestBanner
 @Composable
 internal fun AdBanner(
     modifier: Modifier,
-    isTestAd: Boolean,
     adUnitId: String,
     onAdFailedToLoad: (LoadAdError) -> Unit = {}
 ) {
-    val bannerAd = remember {
-        if (isTestAd) TestBanner.unitId else adUnitId
-    }
     var adView: AdView? = remember { null }
     var adLoaded by remember { mutableStateOf(false) }
 
@@ -75,7 +71,7 @@ internal fun AdBanner(
         )
     }
 
-    DisposableEffect(bannerAd) {
+    DisposableEffect(Unit) {
         onDispose {
             adView?.destroy()
         }

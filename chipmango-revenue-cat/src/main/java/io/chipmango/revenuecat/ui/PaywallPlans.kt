@@ -19,6 +19,7 @@ import io.chipmango.revenuecat.viewmodel.PaywallViewModel
 
 @Composable
 internal fun <T> PaywallPlans(
+    activity: Activity,
     colors: PaywallColors = PaywallDefaultStyle.colors(),
     texts: PaywallTexts = PaywallDefaultStyle.texts(),
     textStyles: PaywallTextStyles = PaywallDefaultStyle.textStyles(),
@@ -29,7 +30,6 @@ internal fun <T> PaywallPlans(
     initialPlan: (Map<UpgradePlan, StoreProduct?>) -> UpgradePlan?,
     showcaseContent: @Composable () -> Unit
 ) {
-    val activity = LocalContext.current as Activity
     val paywallViewModel = hiltViewModel<PaywallViewModel>()
     val options = remember(products) { optionMapper(products) }
     var currentOption by remember(options) {
