@@ -3,6 +3,7 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+        maven("https://jitpack.io")
     }
 }
 dependencyResolutionManagement {
@@ -15,4 +16,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "Android Wizard"
 include(":app")
-include(":log")
+include(":chipmango")
+include(":chipmango-ad")
+include(":chipmango-revenue-cat")

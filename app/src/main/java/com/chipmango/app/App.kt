@@ -1,6 +1,23 @@
 package com.chipmango.app
 
-import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
+import io.chipmango.base.CoreApplication
+import io.chipmango.revenuecat.RevenueCat
+import javax.inject.Inject
 
-class App : Application() {
+@HiltAndroidApp
+class App : CoreApplication() {
+
+
+    @Inject
+    lateinit var revenueCat: RevenueCat
+
+    override fun isLogEnabled(): Boolean {
+        return true
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        revenueCat.init(this, "goog_pyAPqDZUVyHHDXMlcLPUvNWgPQo", true)
+    }
 }

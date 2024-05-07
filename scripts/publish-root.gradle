@@ -1,0 +1,111 @@
+// Create variables with empty default values
+ext["ossrhUsername"] = 'tiendung717'
+ext["ossrhPassword"] = 'B@chkh0a1989'
+ext["sonatypeStagingProfileId"] = '10c23efafb905'
+ext["signing.keyId"] = '785EF6C4'
+ext["signing.password"] = 'B@chkh0a'
+ext["signing.key"] = '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\n' +
+        '1f/5/TE='
+ext["snapshot"] = ''
+ext["rootVersionName"] = '1.0.0'
+
+
+// Set up Sonatype repository
+nexusPublishing {
+    repositories {
+        sonatype {
+            stagingProfileId = sonatypeStagingProfileId
+            username = ossrhUsername
+            password = ossrhPassword
+            version = rootVersionName
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+        }
+    }
+}
