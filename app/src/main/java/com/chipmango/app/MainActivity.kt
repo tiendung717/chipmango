@@ -14,7 +14,7 @@ data object BlankAdUnit : AdUnit("")
 @AndroidEntryPoint
 class MainActivity : AdDisplayActivity() {
 
-    override fun isAdEnabled(): Boolean {
+    override suspend fun isAdEnabled(): Boolean {
         return true
     }
 

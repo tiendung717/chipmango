@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="rating_question">How satisfied are you with our app?</string>
-    <string name="very_dissatisfied">Very dissatisfied</string>
-    <string name="submit">Submit</string>
-    <string name="rate_us_on_the_playstore">Rate us on the Playstore</string>
-    <string name="not_now">Not now</string>
-</resources>
