@@ -235,6 +235,16 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
         return hasCancelledTrial && !hasActiveEntitlement
     }
 
+    fun hasActiveTrial(customerInfo: CustomerInfo): Boolean {
+        val hasTrial = customerInfo.entitlements.all.any { entry ->
+            val entitlementInfo = entry.value
+            val activeTrial = entitlementInfo.isActive && entitlementInfo.periodType == PeriodType.TRIAL
+            activeTrial
+        }
+
+        return hasTrial
+    }
+
     fun hasUsedAppForDuration(customerInfo: CustomerInfo, duration: Duration): Boolean {
         val hasActiveEntitlement = customerInfo.entitlements.hasActiveEntitlements()
         val firstSeen = customerInfo.firstSeen.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()

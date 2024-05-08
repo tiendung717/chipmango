@@ -183,6 +183,10 @@ class PaywallViewModel @Inject constructor(
         return revenueCat.hasUserCancelledTrial(customerInfo)
     }
 
+    fun hasActiveTrial(customerInfo: CustomerInfo): Boolean {
+        return revenueCat.hasActiveTrial(customerInfo)
+    }
+
     fun hasUsedAppForDuration(customerInfo: CustomerInfo, duration: Duration): Boolean {
         return revenueCat.hasUsedAppForDuration(customerInfo, duration)
     }

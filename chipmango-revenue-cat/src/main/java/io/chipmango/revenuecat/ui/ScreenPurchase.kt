@@ -34,7 +34,8 @@ fun ScreenPurchase(
     shapes: PaywallShapes = PaywallDefaultStyle.shapes(),
     showcaseContent: @Composable () -> Unit,
     onSystemError: (String) -> Unit,
-    onPurchaseCompleted: () -> Unit
+    onPurchaseCompleted: () -> Unit,
+    onUserActivatedTrial: () -> Unit
 ) {
     val paywallViewModel = hiltViewModel<PaywallViewModel>()
     var showThanksDialog by remember { mutableStateOf(false) }
@@ -42,6 +43,11 @@ fun ScreenPurchase(
         object : PurchaseListener {
             override fun onPurchaseCompleted(customerInfo: CustomerInfo) {
                 val isPremium = customerInfo.entitlements.hasActiveEntitlements()
+                val hasActiveTrial = paywallViewModel.hasActiveTrial(customerInfo)
+                if (hasActiveTrial) {
+                    onUserActivatedTrial()
+                }
+
                 if (isPremium) {
                     showThanksDialog = true
                 }
