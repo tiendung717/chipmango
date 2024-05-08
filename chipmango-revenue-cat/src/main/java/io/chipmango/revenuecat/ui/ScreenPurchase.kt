@@ -33,7 +33,8 @@ fun ScreenPurchase(
     textStyles: PaywallTextStyles = PaywallDefaultStyle.textStyles(),
     shapes: PaywallShapes = PaywallDefaultStyle.shapes(),
     showcaseContent: @Composable () -> Unit,
-    onSystemError: (String) -> Unit
+    onSystemError: (String) -> Unit,
+    onPurchaseCompleted: () -> Unit
 ) {
     val paywallViewModel = hiltViewModel<PaywallViewModel>()
     var showThanksDialog by remember { mutableStateOf(false) }
@@ -204,9 +205,10 @@ fun ScreenPurchase(
     }
 
     if (showThanksDialog) {
-        ThanksDialog(onDismissRequest = { showThanksDialog = false }) {
-            activity.finish()
-        }
+        ThanksDialog(
+            onDismissRequest = { showThanksDialog = false },
+            onContinueClick = onPurchaseCompleted
+        )
     }
 }
 
