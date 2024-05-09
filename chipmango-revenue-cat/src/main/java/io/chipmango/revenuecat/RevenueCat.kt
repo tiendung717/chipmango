@@ -154,7 +154,7 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
             },
             onSuccess = { _, customerInfo ->
                 savePurchase(customerInfo)
-                purchaseListener?.onPurchaseCompleted(customerInfo)
+                purchaseListener?.onPurchaseCompleted(packageToPurchase.product, customerInfo)
             }
         )
     }
@@ -178,7 +178,7 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
                 coroutineScope.launch {
                     save(KEY_PREMIUM, isPremium)
                 }.invokeOnCompletion {
-                    purchaseListener?.onPurchaseCompleted(customerInfo)
+                    purchaseListener?.onPurchaseCompleted(product, customerInfo)
                 }
             }
         )
@@ -194,7 +194,7 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
                 coroutineScope.launch {
                     save(KEY_PREMIUM, isPremium)
                 }.invokeOnCompletion {
-                    purchaseListener?.onPurchaseCompleted(customerInfo)
+                    purchaseListener?.onRestoreCompleted(customerInfo)
                 }
             }
         )

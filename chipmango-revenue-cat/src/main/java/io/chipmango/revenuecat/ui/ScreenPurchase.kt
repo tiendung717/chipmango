@@ -8,7 +8,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Offering
@@ -35,26 +34,51 @@ fun ScreenPurchase(
     showcaseContent: @Composable () -> Unit,
     onSystemError: (String) -> Unit,
     onPurchaseCompleted: () -> Unit,
-    onUserActivatedTrial: () -> Unit
+    onRestorePurchaseCompleted: () -> Unit,
+    onUserCancelled: () -> Unit,
+    onUserActivatedTrial: () -> Unit,
+    onUserBoughtLifetime: () -> Unit,
+    onUserBoughtLifetimeDiscount: () -> Unit,
+    onUserSubscribed: () -> Unit
 ) {
     val paywallViewModel = hiltViewModel<PaywallViewModel>()
     var showThanksDialog by remember { mutableStateOf(false) }
     val purchaseListener = remember {
         object : PurchaseListener {
-            override fun onPurchaseCompleted(customerInfo: CustomerInfo) {
-                val isPremium = customerInfo.entitlements.hasActiveEntitlements()
-                val hasActiveTrial = paywallViewModel.hasActiveTrial(customerInfo)
-                if (hasActiveTrial) {
-                    onUserActivatedTrial()
-                }
 
+            override fun onPurchaseCompleted(product: StoreProduct, customerInfo: CustomerInfo) {
+                val isPremium = customerInfo.entitlements.hasActiveEntitlements()
                 if (isPremium) {
+                    val hasActiveTrial = paywallViewModel.hasActiveTrial(customerInfo)
+                    val sku = skuType(product)
+                    when {
+                        hasActiveTrial -> {
+                            onUserActivatedTrial()
+                        }
+                        sku == SkuType.LifeTime -> {
+                            onUserBoughtLifetime()
+                        }
+                        sku == SkuType.LifeTimeDiscount -> {
+                            onUserBoughtLifetimeDiscount()
+                        }
+                        sku == SkuType.MonthLy -> {
+                            onUserSubscribed()
+                        }
+                        sku == SkuType.YearLy -> {
+                            onUserSubscribed()
+                        }
+                    }
+
                     showThanksDialog = true
                 }
             }
 
-            override fun onPurchaseCancelled() {
+            override fun onRestoreCompleted(customerInfo: CustomerInfo) {
+                onRestorePurchaseCompleted()
+            }
 
+            override fun onPurchaseCancelled() {
+                onUserCancelled()
             }
 
             override fun onPurchaseError(error: PurchasesError) {
