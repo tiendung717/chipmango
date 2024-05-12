@@ -113,6 +113,18 @@ class PaywallViewModel @Inject constructor(
         }
     }
 
+    fun loadCustomerInfo(
+        onError: (String) -> Unit,
+        onSuccess: (CustomerInfo) -> Unit
+    ) {
+        viewModelScope.launch {
+            revenueCat.fetchCustomerInfo(
+                onError = onError,
+                onReceived = onSuccess
+            )
+        }
+    }
+
     fun cancelSubscription(
         openManagementUri: (Uri) -> Unit,
         onNoActiveSubscription: () -> Unit,

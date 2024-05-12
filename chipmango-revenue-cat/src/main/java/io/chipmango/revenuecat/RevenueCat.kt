@@ -96,7 +96,6 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
         return cachedProducts
     }
 
-
     fun setPaywallOnboardingShown() {
         isPaywallOnboardingShown = true
     }
@@ -138,6 +137,22 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
         )
     }
 
+    fun fetchCustomerInfo(
+        onError: (String) -> Unit,
+        onReceived: (CustomerInfo) -> Unit
+    ) {
+        Purchases.sharedInstance.getCustomerInfo(
+            object : ReceiveCustomerInfoCallback {
+                override fun onError(error: PurchasesError) {
+                    onError(error.message)
+                }
+
+                override fun onReceived(customerInfo: CustomerInfo) {
+                    onReceived(customerInfo)
+                }
+            }
+        )
+    }
     suspend fun makePurchase(
         activity: Activity,
         packageToPurchase: Package,
