@@ -91,57 +91,57 @@ fun ScreenPurchase(
     var products: List<StoreProduct> by remember { mutableStateOf(paywallViewModel.getCachedProducts()) }
 
     if (paywallViewModel.isDiscountExpired()) {
-        if (offer != null) {
-            PaywallPlans(
-                activity = activity,
-                colors = colors,
-                texts = texts,
-                textStyles = textStyles,
-                shapes = shapes,
-                products = offer?.availablePackages.orEmpty(),
-                purchaseListener = purchaseListener,
-                showcaseContent = showcaseContent,
-                optionMapper = { packages ->
-                    val options = mutableMapOf<UpgradePlan, StoreProduct?>()
-                    packages.forEach {
-                        when (it.packageType) {
-                            PackageType.MONTHLY -> {
-                                val option = UpgradePlan.Monthly(
-                                    title = "Monthly",
-                                    subtitle = getProductDescription(activity, it.product),
-                                    price = it.product.price.formatted
-                                )
-                                options[option] = it.product
-                            }
-
-                            PackageType.ANNUAL -> {
-                                val option = UpgradePlan.Yearly(
-                                    title = "Yearly",
-                                    subtitle = getProductDescription(activity, it.product),
-                                    price = it.product.price.formatted
-                                )
-                                options[option] = it.product
-                            }
-
-                            PackageType.LIFETIME -> {
-                                val option = UpgradePlan.Lifetime(
-                                    title = "Lifetime",
-                                    subtitle = getProductDescription(activity, it.product),
-                                    price = it.product.price.formatted
-                                )
-                                options[option] = it.product
-                            }
-
-                            else -> {}
+        PaywallPlans(
+            activity = activity,
+            colors = colors,
+            texts = texts,
+            textStyles = textStyles,
+            shapes = shapes,
+            products = offer?.availablePackages.orEmpty(),
+            purchaseListener = purchaseListener,
+            showcaseContent = showcaseContent,
+            optionMapper = { packages ->
+                val options = mutableMapOf<UpgradePlan, StoreProduct?>()
+                packages.forEach {
+                    when (it.packageType) {
+                        PackageType.MONTHLY -> {
+                            val option = UpgradePlan.Monthly(
+                                title = "Monthly",
+                                subtitle = getProductDescription(activity, it.product),
+                                price = it.product.price.formatted
+                            )
+                            options[option] = it.product
                         }
+
+                        PackageType.ANNUAL -> {
+                            val option = UpgradePlan.Yearly(
+                                title = "Yearly",
+                                subtitle = getProductDescription(activity, it.product),
+                                price = it.product.price.formatted
+                            )
+                            options[option] = it.product
+                        }
+
+                        PackageType.LIFETIME -> {
+                            val option = UpgradePlan.Lifetime(
+                                title = "Lifetime",
+                                subtitle = getProductDescription(activity, it.product),
+                                price = it.product.price.formatted
+                            )
+                            options[option] = it.product
+                        }
+
+                        else -> {}
                     }
-                    options
-                },
-                initialPlan = {
-                    it.keys.find { plan -> plan is UpgradePlan.Monthly }
                 }
-            )
-        } else {
+                options
+            },
+            initialPlan = {
+                it.keys.find { plan -> plan is UpgradePlan.Monthly }
+            }
+        )
+
+        if (offer != null) {
             LaunchedEffect(Unit) {
                 paywallViewModel.loadCurrentOffering(
                     onError = onSystemError,
@@ -153,74 +153,74 @@ fun ScreenPurchase(
             }
         }
     } else {
-        if (products.isNotEmpty()) {
-            PaywallPlans(
-                activity = activity,
-                colors = colors,
-                texts = texts,
-                textStyles = textStyles,
-                shapes = shapes,
-                products = products,
-                purchaseListener = purchaseListener,
-                showcaseContent = showcaseContent,
-                optionMapper = {
-                    val options = mutableMapOf<UpgradePlan, StoreProduct?>()
-                    var discountLifetime = UpgradePlan.LifetimeDiscount(
-                        title = "Lifetime",
-                        price = "",
-                        discountPrice = "",
-                        discountPercentage = "SAVE 50%",
-                        discountDuration = paywallViewModel.getRemainingDiscountDuration()
-                            .toMillis()
-                    )
-                    var discountProduct: StoreProduct? = null
-                    products.forEach {
-                        when (skuType(it)) {
-                            SkuType.LifeTimeDiscount -> {
-                                discountProduct = it
-                                discountLifetime = discountLifetime.copy(
-                                    discountPrice = it.price.formatted,
-                                    subtitle = getProductDescription(activity, it)
-                                )
-                            }
-
-                            SkuType.LifeTime -> {
-                                discountLifetime = discountLifetime.copy(
-                                    price = it.price.formatted,
-                                    subtitle = getProductDescription(activity, it)
-                                )
-                            }
-
-                            SkuType.MonthLy -> {
-                                val option = UpgradePlan.Monthly(
-                                    title = "Monthly",
-                                    subtitle = getProductDescription(activity, it),
-                                    price = it.price.formatted
-                                )
-                                options[option] = it
-                            }
-
-                            SkuType.YearLy -> {
-                                val option = UpgradePlan.Monthly(
-                                    title = "Yearly",
-                                    subtitle = getProductDescription(activity, it),
-                                    price = it.price.formatted
-                                )
-                                options[option] = it
-                            }
-
-                            else -> {}
+        PaywallPlans(
+            activity = activity,
+            colors = colors,
+            texts = texts,
+            textStyles = textStyles,
+            shapes = shapes,
+            products = products,
+            purchaseListener = purchaseListener,
+            showcaseContent = showcaseContent,
+            optionMapper = {
+                val options = mutableMapOf<UpgradePlan, StoreProduct?>()
+                var discountLifetime = UpgradePlan.LifetimeDiscount(
+                    title = "Lifetime",
+                    price = "",
+                    discountPrice = "",
+                    discountPercentage = "SAVE 50%",
+                    discountDuration = paywallViewModel.getRemainingDiscountDuration()
+                        .toMillis()
+                )
+                var discountProduct: StoreProduct? = null
+                products.forEach {
+                    when (skuType(it)) {
+                        SkuType.LifeTimeDiscount -> {
+                            discountProduct = it
+                            discountLifetime = discountLifetime.copy(
+                                discountPrice = it.price.formatted,
+                                subtitle = getProductDescription(activity, it)
+                            )
                         }
-                    }
 
-                    options[discountLifetime] = discountProduct
-                    options
-                },
-                initialPlan = {
-                    it.keys.find { plan -> plan is UpgradePlan.LifetimeDiscount }
+                        SkuType.LifeTime -> {
+                            discountLifetime = discountLifetime.copy(
+                                price = it.price.formatted,
+                                subtitle = getProductDescription(activity, it)
+                            )
+                        }
+
+                        SkuType.MonthLy -> {
+                            val option = UpgradePlan.Monthly(
+                                title = "Monthly",
+                                subtitle = getProductDescription(activity, it),
+                                price = it.price.formatted
+                            )
+                            options[option] = it
+                        }
+
+                        SkuType.YearLy -> {
+                            val option = UpgradePlan.Monthly(
+                                title = "Yearly",
+                                subtitle = getProductDescription(activity, it),
+                                price = it.price.formatted
+                            )
+                            options[option] = it
+                        }
+
+                        else -> {}
+                    }
                 }
-            )
-        } else {
+
+                options[discountLifetime] = discountProduct
+                options
+            },
+            initialPlan = {
+                it.keys.find { plan -> plan is UpgradePlan.LifetimeDiscount }
+            }
+        )
+
+        if (products.isEmpty()) {
             LaunchedEffect(Unit) {
                 paywallViewModel.loadProducts(
                     productIds = discountProductIds,

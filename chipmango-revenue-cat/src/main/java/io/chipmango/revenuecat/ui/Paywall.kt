@@ -1,14 +1,17 @@
 package io.chipmango.revenuecat.ui
 
 import android.os.CountDownTimer
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
@@ -68,29 +72,45 @@ internal fun Paywall(
                 showcaseContent()
             }
 
-            item {
-                UpgradePlans(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    currentOption = currentOption,
-                    onOptionSelected = onOptionSelected,
-                    shape = shapes.optionShape,
-                    containerColor = colors.optionContainerColor,
-                    activeContainerColor = colors.optionActiveContainerColor,
-                    titleTextColor = colors.optionTitleTextColor,
-                    activeTextColor = colors.optionActiveTextColor,
-                    subtitleTextColor = colors.optionSubtitleTextColor,
-                    activeSubtitleTextColor = colors.optionActiveSubtitleTextColor,
-                    priceTextColor = colors.optionPriceTextColor,
-                    activePriceTextColor = colors.optionActivePriceTextColor,
-                    borderColor = colors.optionActiveBorderColor,
-                    titleTextStyle = textStyles.optionTitleTextStyle,
-                    subtitleTextStyle = textStyles.optionSubtitleTextStyle,
-                    priceTextStyle = textStyles.optionPriceTextStyle,
-                    discountContainerColor = colors.optionDiscountContainerColor,
-                    discountContentColor = colors.optionDiscountContentColor,
-                    discountTextStyle = textStyles.optionDiscountTextStyle,
-                    options = options.toTypedArray()
-                )
+            if (options.isEmpty()) {
+                item {
+                    Spacer(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth()
+                            .height(140.dp)
+                            .background(
+                                color = colors.optionNotAvailableContainerColor,
+                                shape = shapes.optionShape
+                            )
+                            .clip(shapes.optionShape)
+                    )
+                }
+            } else {
+                item {
+                    UpgradePlans(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        currentOption = currentOption,
+                        onOptionSelected = onOptionSelected,
+                        shape = shapes.optionShape,
+                        containerColor = colors.optionContainerColor,
+                        activeContainerColor = colors.optionActiveContainerColor,
+                        titleTextColor = colors.optionTitleTextColor,
+                        activeTextColor = colors.optionActiveTextColor,
+                        subtitleTextColor = colors.optionSubtitleTextColor,
+                        activeSubtitleTextColor = colors.optionActiveSubtitleTextColor,
+                        priceTextColor = colors.optionPriceTextColor,
+                        activePriceTextColor = colors.optionActivePriceTextColor,
+                        borderColor = colors.optionActiveBorderColor,
+                        titleTextStyle = textStyles.optionTitleTextStyle,
+                        subtitleTextStyle = textStyles.optionSubtitleTextStyle,
+                        priceTextStyle = textStyles.optionPriceTextStyle,
+                        discountContainerColor = colors.optionDiscountContainerColor,
+                        discountContentColor = colors.optionDiscountContentColor,
+                        discountTextStyle = textStyles.optionDiscountTextStyle,
+                        options = options.toTypedArray()
+                    )
+                }
             }
 
             item {
@@ -121,7 +141,8 @@ internal fun Paywall(
                     ctaRestoreTextStyle = textStyles.ctaRestoreTextStyle,
                     policyTextStyle = textStyles.policyTextStyle,
                     ctaRestoreShape = shapes.ctaShape,
-                    ctaPurchaseShape = shapes.ctaShape
+                    ctaPurchaseShape = shapes.ctaShape,
+                    enabled = options.isNotEmpty()
                 )
             }
         }
@@ -164,6 +185,7 @@ private fun Header(
 @Composable
 fun CtaButtons(
     modifier: Modifier,
+    enabled: Boolean,
     ctaPurchaseLabel: String,
     ctaRestoreLabel: String,
     policyText: String,
@@ -190,7 +212,8 @@ fun CtaButtons(
             contentPadding = PaddingValues(
                 horizontal = 12.dp,
                 vertical = 16.dp
-            )
+            ),
+            enabled = enabled
         ) {
             Text(
                 modifier = Modifier,
@@ -208,7 +231,8 @@ fun CtaButtons(
             contentPadding = PaddingValues(
                 horizontal = 12.dp,
                 vertical = 16.dp
-            )
+            ),
+            enabled = enabled
         ) {
             Text(
                 modifier = Modifier,
@@ -324,15 +348,16 @@ private fun UpgradePlans(
                                 mutableStateOf("")
                             }
                             DisposableEffect(Unit) {
-                                val timer = object : CountDownTimer(option.discountDuration, 1_000) {
-                                    override fun onTick(remainMs: Long) {
-                                        duration = "Expires in ${formatMillisToTime(remainMs)}"
-                                    }
+                                val timer =
+                                    object : CountDownTimer(option.discountDuration, 1_000) {
+                                        override fun onTick(remainMs: Long) {
+                                            duration = "Expires in ${formatMillisToTime(remainMs)}"
+                                        }
 
-                                    override fun onFinish() {
+                                        override fun onFinish() {
 
+                                        }
                                     }
-                                }
                                 timer.start()
 
                                 onDispose {
@@ -406,40 +431,19 @@ private fun UpgradePlans(
 @Composable
 private fun PaywallPreview() {
     val options = remember {
-        listOf(
-            UpgradePlan.Monthly(
-                title = "Monthly",
-                subtitle = "Billed monthly",
-                price = "$9.99/mo"
-            ),
-            UpgradePlan.Yearly(
-                title = "Yearly",
-                subtitle = "Billed yearly",
-                price = "$99.99/yr"
-            ),
-            UpgradePlan.Lifetime(
-                title = "Lifetime",
-                subtitle = "One-time payment",
-                price = "$199.99"
-            ),
-            UpgradePlan.LifetimeDiscount(
-                title = "Lifetime",
-                subtitle = "One-time payment",
-                price = "$99.99",
-                discountPrice = "$199.99",
-                discountPercentage = "SAVE 50%",
-                discountDuration = 50_000
-            )
-        )
+        emptyList<UpgradePlan>()
     }
 
     Paywall(
         onRestoreClick = {},
         onPurchaseClick = {},
         options = options,
-        currentOption = options.first(),
+        currentOption = options.firstOrNull(),
         onOptionSelected = {},
-        showcaseContent = {}
+        showcaseContent = {},
+        colors = PaywallDefaultStyle.colors(
+            optionContainerColor = Color.Gray
+        ),
     )
 }
 
@@ -493,7 +497,8 @@ private fun CtaButtonsPreview() {
             policyText = stringResource(id = R.string.payment_policy),
             ctaPurchaseTextStyle = MaterialTheme.typography.titleMedium,
             ctaRestoreTextStyle = MaterialTheme.typography.titleMedium,
-            policyTextStyle = MaterialTheme.typography.labelMedium
+            policyTextStyle = MaterialTheme.typography.labelMedium,
+            enabled = false
         )
     }
 }
@@ -549,7 +554,7 @@ private fun UpgradePlansPreview() {
             subtitleTextStyle = MaterialTheme.typography.bodyMedium,
             priceTextStyle = MaterialTheme.typography.titleMedium,
             discountTextStyle = MaterialTheme.typography.labelMedium,
-            options = options.toTypedArray()
+            options = emptyArray()
         )
     }
 }

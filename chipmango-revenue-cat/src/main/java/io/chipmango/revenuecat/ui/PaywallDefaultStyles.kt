@@ -17,6 +17,7 @@ data class PaywallColors(
     val ctaPurchaseTextColor: Color,
     val ctaRestoreTextColor: Color,
     val policyTextColor: Color,
+    val optionNotAvailableContainerColor: Color,
     val optionContainerColor: Color,
     val optionActiveContainerColor: Color,
     val optionTitleTextColor: Color,
@@ -76,6 +77,7 @@ object PaywallDefaultStyle {
         optionActiveBorderColor: Color = Color.Black,
         optionDiscountContainerColor: Color = Color.Black,
         optionDiscountContentColor: Color = Color.White,
+        optionNotAvailableContainerColor: Color = Color.Gray,
         dashedDividerColor: Color = Color.Gray
     ) = PaywallColors(
         containerColor = containerColor,
@@ -95,7 +97,8 @@ object PaywallDefaultStyle {
         optionActiveBorderColor = optionActiveBorderColor,
         dashedDividerColor = dashedDividerColor,
         optionDiscountContainerColor = optionDiscountContainerColor,
-        optionDiscountContentColor = optionDiscountContentColor
+        optionDiscountContentColor = optionDiscountContentColor,
+        optionNotAvailableContainerColor = optionNotAvailableContainerColor
     )
 
     @Composable
