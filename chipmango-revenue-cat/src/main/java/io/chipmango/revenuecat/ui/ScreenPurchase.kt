@@ -141,7 +141,7 @@ fun ScreenPurchase(
             }
         )
 
-        if (offer != null) {
+        if (offer == null) {
             LaunchedEffect(Unit) {
                 paywallViewModel.loadCurrentOffering(
                     onError = onSystemError,
