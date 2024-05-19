@@ -45,20 +45,22 @@ fun PaywallOnboard(
                 )
             },
             onSubsequentLaunch = {
-                // Check to show discount offer
-                paywallViewModel.evaluateDiscountOfferDisplay(
-                    discountStartTime = discountStartTime,
-                    discountDuration = discountDuration,
-                    discountMessage = discountMessage,
-                    discountTitle = discountTitle,
-                    discountUniqueRequestId = discountUniqueRequestId,
-                    discountReceiverClass = discountReceiverClass,
-                    shouldTriggerDiscount = shouldTriggerDiscount
-                )
-
                 // Check to show paywall
                 val isPremium = runBlocking {
                     paywallViewModel.getPremiumStatusFlow().firstOrNull() ?: false
+                }
+
+                if (isPremium.not()) {
+                    // Check to show discount offer
+                    paywallViewModel.evaluateDiscountOfferDisplay(
+                        discountStartTime = discountStartTime,
+                        discountDuration = discountDuration,
+                        discountMessage = discountMessage,
+                        discountTitle = discountTitle,
+                        discountUniqueRequestId = discountUniqueRequestId,
+                        discountReceiverClass = discountReceiverClass,
+                        shouldTriggerDiscount = shouldTriggerDiscount
+                    )
                 }
 
                 paywallViewModel.loadOfferingAndDiscount(
