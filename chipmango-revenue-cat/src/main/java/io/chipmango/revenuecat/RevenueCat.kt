@@ -55,7 +55,7 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
         private const val KEY_DISCOUNT_EXPIRY = "key_discount_expiry"
     }
 
-    private val Context.dataStore by preferencesDataStore(name = "purchase.ds")
+    private val Context.dataStore by preferencesDataStore(name = "purchase.preferences_pb")
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var isPaywallOnboardingShown = false
     private var cachedOffering: Offering? = null
