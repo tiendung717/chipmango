@@ -12,7 +12,6 @@ fun InterstitalAdContainer(
     adUnitId: String,
     shouldDisplayAd: () -> Boolean,
     onAdClosed: () -> Unit,
-    onAdClicked: () -> Unit,
     onAdFailedToShow: () -> Unit,
     onAdNotAvailable: () -> Unit,
     onAdDisplayNotRequired: () -> Unit,
@@ -26,8 +25,7 @@ fun InterstitalAdContainer(
                 adUnitId = adUnitId,
                 onAdClosed = onAdClosed,
                 onAdFailedToShow = onAdFailedToShow,
-                onAdNotAvailable = onAdNotAvailable,
-                onAdClicked = onAdClicked
+                onAdNotAvailable = onAdNotAvailable
             )
         } else {
             onAdDisplayNotRequired()

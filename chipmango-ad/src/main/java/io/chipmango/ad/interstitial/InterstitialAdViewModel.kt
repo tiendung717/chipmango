@@ -24,7 +24,6 @@ class InterstitialAdViewModel @Inject constructor(
         activity: Activity,
         adUnitId: String,
         onAdClosed: () -> Unit,
-        onAdClicked: () -> Unit,
         onAdFailedToShow: () -> Unit,
         onAdNotAvailable: () -> Unit
     ) {
