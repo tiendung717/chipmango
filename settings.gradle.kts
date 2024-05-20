@@ -14,7 +14,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Android Wizard"
+rootProject.name = "Chipmango SDK"
 include(":app")
 include(":chipmango")
 include(":chipmango-ad")
