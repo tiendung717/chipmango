@@ -11,7 +11,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 
 @Composable
-private fun InterstitalAdContainer(
+fun InterstitalAdContainer(
     activity: Activity,
     adUnitId: String,
     shouldDisplayAd: () -> Boolean,
