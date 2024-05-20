@@ -2,8 +2,6 @@ package io.chipmango.ad.interstitial
 
 import android.app.Activity
 import android.content.Context
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
@@ -11,7 +9,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.chipmango.ad.request.AdRequestFactory
-import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -31,10 +29,12 @@ class InterstitialAdRepo @Inject constructor(@ApplicationContext private val con
             AdRequestFactory.create(),
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(error: LoadAdError) {
+                    Timber.tag("nt.dung").e("onAdFailedToLoad: ${error.message}")
                     setInterstitialAd(adUnitId, null)
                 }
 
                 override fun onAdLoaded(ad: InterstitialAd) {
+                    Timber.tag("nt.dung").e("onAdLoaded (responseId): ${ad.responseInfo.responseId}")
                     setInterstitialAd(adUnitId, ad)
                 }
             }
@@ -45,7 +45,6 @@ class InterstitialAdRepo @Inject constructor(@ApplicationContext private val con
         activity: Activity,
         adUnitId: String,
         onAdDismissed: () -> Unit,
-        onAdClicked: () -> Unit,
         onAdFailedToShow: () -> Unit,
         onAdNotAvailable: () -> Unit
     ) {
@@ -54,19 +53,23 @@ class InterstitialAdRepo @Inject constructor(@ApplicationContext private val con
             val fullContentCallback = object : FullScreenContentCallback() {
                 override fun onAdClicked() {
                     super.onAdClicked()
-                    onAdClicked()
                 }
 
                 override fun onAdDismissedFullScreenContent() {
                     super.onAdDismissedFullScreenContent()
-                    setInterstitialAd(adUnitId, null)
                     onAdDismissed()
                 }
 
                 override fun onAdFailedToShowFullScreenContent(error: AdError) {
                     super.onAdFailedToShowFullScreenContent(error)
                     setInterstitialAd(adUnitId, null)
+                    loadInterstitialAd(adUnitId)
                     onAdFailedToShow()
+                }
+
+                override fun onAdShowedFullScreenContent() {
+                    super.onAdShowedFullScreenContent()
+                    loadInterstitialAd(adUnitId)
                 }
             }
             interstitialAd.fullScreenContentCallback = fullContentCallback

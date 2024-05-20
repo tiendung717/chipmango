@@ -34,8 +34,7 @@ class InterstitialAdViewModel @Inject constructor(
                 adUnitId = adUnitId,
                 onAdDismissed = onAdClosed,
                 onAdFailedToShow = onAdFailedToShow,
-                onAdNotAvailable = onAdNotAvailable,
-                onAdClicked = onAdClicked
+                onAdNotAvailable = onAdNotAvailable
             )
         }
     }
