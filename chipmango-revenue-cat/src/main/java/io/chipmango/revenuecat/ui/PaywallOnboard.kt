@@ -6,9 +6,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleStartEffect
 import com.revenuecat.purchases.CustomerInfo
-import com.revenuecat.purchases.Offering
-import com.revenuecat.purchases.models.StoreProduct
-import io.chipmango.revenuecat.receiver.DiscountReceiver
 import io.chipmango.revenuecat.viewmodel.PaywallViewModel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
@@ -20,13 +17,12 @@ fun PaywallOnboard(
     paywallViewModel: PaywallViewModel = hiltViewModel<PaywallViewModel>(),
     discountProductIds: List<String>,
     discountStartTime: ZonedDateTime,
-    discountUniqueRequestId: Int,
-    discountTitle: String,
-    discountMessage: String,
     discountDuration: Duration,
-    discountReceiverClass: Class<out DiscountReceiver>,
     shouldTriggerDiscount: (CustomerInfo) -> Boolean = {
-        paywallViewModel.userCancelledTrial(it) || paywallViewModel.hasUsedAppForDuration(it, Duration.ofDays(3))
+        paywallViewModel.userCancelledTrial(it) || paywallViewModel.hasUsedAppForDuration(
+            it,
+            Duration.ofDays(3)
+        )
     },
     onLaunchPaywall: () -> Unit
 ) {
@@ -50,18 +46,12 @@ fun PaywallOnboard(
                     paywallViewModel.getPremiumStatusFlow().firstOrNull() ?: false
                 }
 
-                if (isPremium.not()) {
-                    // Check to show discount offer
-                    paywallViewModel.evaluateDiscountOfferDisplay(
-                        discountStartTime = discountStartTime,
-                        discountDuration = discountDuration,
-                        discountMessage = discountMessage,
-                        discountTitle = discountTitle,
-                        discountUniqueRequestId = discountUniqueRequestId,
-                        discountReceiverClass = discountReceiverClass,
-                        shouldTriggerDiscount = shouldTriggerDiscount
-                    )
-                }
+                // Check to show discount offer
+                paywallViewModel.evaluateDiscountOfferDisplay(
+                    discountStartTime = discountStartTime,
+                    discountDuration = discountDuration,
+                    shouldTriggerDiscount = shouldTriggerDiscount
+                )
 
                 paywallViewModel.loadOfferingAndDiscount(
                     discountProductIds = discountProductIds,
@@ -88,13 +78,12 @@ fun PaywallLauncher(
     paywallViewModel: PaywallViewModel = hiltViewModel<PaywallViewModel>(),
     discountProductIds: List<String>,
     discountStartTime: ZonedDateTime,
-    discountUniqueRequestId: Int,
-    discountTitle: String,
-    discountMessage: String,
     discountDuration: Duration,
-    discountReceiverClass: Class<out DiscountReceiver>,
     shouldTriggerDiscount: (CustomerInfo) -> Boolean = {
-        paywallViewModel.userCancelledTrial(it) || paywallViewModel.hasUsedAppForDuration(it, Duration.ofDays(3))
+        paywallViewModel.userCancelledTrial(it) || paywallViewModel.hasUsedAppForDuration(
+            it,
+            Duration.ofDays(3)
+        )
     },
     onLaunchPaywall: () -> Unit
 ) {
@@ -117,10 +106,6 @@ fun PaywallLauncher(
                 paywallViewModel.evaluateDiscountOfferDisplay(
                     discountStartTime = discountStartTime,
                     discountDuration = discountDuration,
-                    discountMessage = discountMessage,
-                    discountTitle = discountTitle,
-                    discountUniqueRequestId = discountUniqueRequestId,
-                    discountReceiverClass = discountReceiverClass,
                     shouldTriggerDiscount = shouldTriggerDiscount
                 )
 

@@ -2,21 +2,16 @@ package io.chipmango.revenuecat.viewmodel
 
 import android.app.Activity
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Offering
 import io.chipmango.revenuecat.RevenueCat
-import io.chipmango.revenuecat.domain.OfferingResult
 import io.chipmango.revenuecat.PurchaseListener
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.models.StoreProduct
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.chipmango.revenuecat.domain.ProductsResult
-import io.chipmango.revenuecat.receiver.DiscountReceiver
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.ZonedDateTime
@@ -171,22 +166,17 @@ class PaywallViewModel @Inject constructor(
 
     fun evaluateDiscountOfferDisplay(
         discountStartTime: ZonedDateTime,
-        discountUniqueRequestId: Int,
-        discountTitle: String,
-        discountMessage: String,
         discountDuration: Duration,
-        discountReceiverClass: Class<out DiscountReceiver>,
         shouldTriggerDiscount: (CustomerInfo) -> Boolean = {
-            revenueCat.hasUserCancelledTrial(it) || revenueCat.hasUsedAppForDuration(it, Duration.ofDays(3))
+            revenueCat.hasUserCancelledTrial(it) || revenueCat.hasUsedAppForDuration(
+                it,
+                Duration.ofDays(3)
+            )
         }
     ) {
         revenueCat.evaluateDiscountOfferDisplay(
             discountStartTime,
-            discountUniqueRequestId,
-            discountTitle,
-            discountMessage,
             discountDuration,
-            discountReceiverClass,
             shouldTriggerDiscount
         )
     }

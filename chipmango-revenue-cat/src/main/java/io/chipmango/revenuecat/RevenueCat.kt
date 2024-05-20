@@ -38,7 +38,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.time.Duration
 import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import javax.inject.Inject
@@ -270,11 +269,7 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
 
     fun evaluateDiscountOfferDisplay(
         discountStartTime: ZonedDateTime,
-        discountUniqueRequestId: Int,
-        discountTitle: String,
-        discountMessage: String,
         discountDuration: Duration,
-        discountReceiverClass: Class<out DiscountReceiver>,
         shouldTriggerDiscount: (CustomerInfo) -> Boolean = { hasUserCancelledTrial(it) }
     ) {
         if (!isDiscountReminderSet()) {
@@ -286,13 +281,6 @@ class RevenueCat @Inject constructor(@ApplicationContext private val context: Co
 
                     override fun onReceived(customerInfo: CustomerInfo) {
                         if (shouldTriggerDiscount(customerInfo)) {
-                            setDiscountReminder(
-                                discountStartTime,
-                                discountUniqueRequestId,
-                                discountTitle,
-                                discountMessage,
-                                discountReceiverClass
-                            )
                             onDiscountReminderSetupComplete()
                             onDiscountExpirySet(discountStartTime, discountDuration)
                         }
