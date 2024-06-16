@@ -6,6 +6,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 
 
+@Deprecated("This will be removed soon!!")
 @Composable
 fun InterstitalAdContainer(
     activity: Activity,
